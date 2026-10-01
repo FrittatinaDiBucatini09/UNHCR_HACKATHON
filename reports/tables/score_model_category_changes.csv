@@ -1,0 +1,8 @@
+candidate,test_households,category_differs_from_formula,of_which_near_cutpoint,households_near_cutpoint
+Recovered formula,380,0,0,95
+Linear,380,16,15,95
+Linear in log factors,380,29,28,95
+Linear with block interactions,380,25,25,95
+Ridge with interactions and attributes,380,26,26,95
+LightGBM,380,8,8,95
+LightGBM with attributes,380,10,10,95

@@ -55,5 +55,59 @@
     "duplicate_flagged": 48,
     "duplicate_flagged_with_duplicate_status": 1,
     "final_score_month_trend_p_value": 0.647
+  },
+  "phase_2_score_model": {
+    "selected_model": "Recovered formula",
+    "selected_model_fitted_parameters": 0,
+    "most_accurate_learned_model": "LightGBM",
+    "test_households": 380,
+    "formula_test_mae": {
+      "value": 4.86447373739701e-06,
+      "ci": [
+        4.53578941163023e-06,
+        5.165081160493138e-06
+      ]
+    },
+    "formula_test_max_abs_error": {
+      "value": 1.4591310886657993e-05,
+      "ci": [
+        1.2583744762650895e-05,
+        1.4591310886657993e-05
+      ]
+    },
+    "formula_test_category_accuracy": {
+      "value": 0.9947368421052631,
+      "ci": [
+        0.9868421052631579,
+        1.0
+      ]
+    },
+    "best_learned_test_mae": {
+      "value": 0.29992412968082244,
+      "ci": [
+        0.2541650559230154,
+        0.3532071647341714
+      ]
+    },
+    "best_learned_test_max_abs_error": {
+      "value": 6.323656655507715,
+      "ci": [
+        1.9534098276008436,
+        6.323656655507715
+      ]
+    },
+    "best_learned_test_category_accuracy": {
+      "value": 0.9736842105263158,
+      "ci": [
+        0.9552631578947368,
+        0.9894736842105263
+      ]
+    },
+    "best_learned_category_differs_from_formula": 8,
+    "best_learned_unseen_combination_mae": 0.7996041429892383,
+    "attribution_sum_max_abs_error": 2.842170943040401e-14,
+    "largest_mean_attribution_factor": "Housing",
+    "lightgbm_shap_mean_total_difference": 1.2724873674725283,
+    "lightgbm_largest_factor_differs_share": 0.0673854447439353
   }
 }

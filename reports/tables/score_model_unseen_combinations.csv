@@ -1,0 +1,15 @@
+candidate,combination,households,mae,max_abs_error
+Recovered formula,Seen in training,312,5.230056982625114e-06,1.4591310886657993e-05
+Recovered formula,Not seen in training,68,3.1870917887033556e-06,1.0719877430176439e-05
+Linear,Seen in training,312,0.8158607026831148,4.634401438308657
+Linear,Not seen in training,68,1.2008995666021984,7.27166766790463
+Linear in log factors,Seen in training,312,0.9579688339832594,5.209999458113884
+Linear in log factors,Not seen in training,68,1.2932573924254798,6.8192045858475225
+Linear with block interactions,Seen in training,312,0.6154212089696705,2.5315563622168966
+Linear with block interactions,Not seen in training,68,0.9199639416196908,3.3561871015048688
+Ridge with interactions and attributes,Seen in training,312,0.6124867889573581,2.674949224533009
+Ridge with interactions and attributes,Not seen in training,68,0.9266725446376028,3.3929029707020177
+LightGBM,Seen in training,312,0.19101951139565482,1.889041407807838
+LightGBM,Not seen in training,68,0.7996041429892383,6.323656655507715
+LightGBM with attributes,Seen in training,312,0.24014147661925156,1.9277412591831578
+LightGBM with attributes,Not seen in training,68,0.8388540819730935,6.542501128625972

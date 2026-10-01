@@ -6,6 +6,9 @@ The vulnerability index is the sum of the two block geometric means, and the
 final score rescales that sum so that the highest possible combination gives 100.
 """
 
+import itertools
+from math import factorial
+
 import numpy as np
 import pandas as pd
 
@@ -77,3 +80,44 @@ def category(index: pd.Series) -> pd.Series:
     """Vulnerability category, as recorded in the sample, from the index."""
     codes = np.digitize(index, CATEGORY_CUTPOINTS)
     return pd.Series(np.asarray(CATEGORY_ORDER)[codes], index=index.index)
+
+
+def score_category(final: pd.Series) -> pd.Series:
+    """Vulnerability category, as recorded in the sample, from a final score."""
+    top = top_geometric_mean(DEMOGRAPHIC_FACTORS) + top_geometric_mean(NEEDS_FACTORS)
+    return category(2 + final * (top - 2) / FINAL_MAX_SCORE)
+
+
+def shapley_values(df: pd.DataFrame) -> pd.DataFrame:
+    """Exact Shapley values of the final score, one column per factor.
+
+    A factor left out of a coalition takes its lowest level, 1.0, so the values of
+    a household add up to its final score. The final score is a sum of one term
+    per block, so each factor's value is computed over the factors of its block.
+    """
+    top = top_geometric_mean(DEMOGRAPHIC_FACTORS) + top_geometric_mean(NEEDS_FACTORS)
+    blocks = [
+        block_shapley(df[columns]) for columns in (DEMOGRAPHIC_FACTORS, NEEDS_FACTORS)
+    ]
+    return FINAL_MAX_SCORE / (top - 2) * pd.concat(blocks, axis=1)
+
+
+def block_shapley(factors: pd.DataFrame) -> pd.DataFrame:
+    """Exact Shapley values of (geometric mean - 1) over the columns of one block."""
+    logs = np.log(factors.to_numpy(dtype=float))
+    n = logs.shape[1]
+
+    def gain(coalition: tuple[int, ...]) -> np.ndarray:
+        # Factors outside the coalition sit at 1.0, whose log is 0.
+        return np.exp(logs[:, list(coalition)].sum(axis=1) / n) - 1
+
+    values = np.zeros_like(logs)
+    for player in range(n):
+        others = [other for other in range(n) if other != player]
+        for size in range(n):
+            weight = factorial(size) * factorial(n - size - 1) / factorial(n)
+            for coalition in itertools.combinations(others, size):
+                values[:, player] += weight * (
+                    gain((*coalition, player)) - gain(coalition)
+                )
+    return pd.DataFrame(values, index=factors.index, columns=factors.columns)

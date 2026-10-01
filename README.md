@@ -48,7 +48,13 @@ and must run top to bottom on a fresh kernel.
 
 ```
 .venv/bin/jupyter nbconvert --to notebook --execute --inplace notebooks/01_data_exploration.ipynb
+.venv/bin/jupyter nbconvert --to notebook --execute --inplace notebooks/02_score_model.ipynb
 ```
+
+The first notebook writes the exploration report's tables and figures, the
+second those of the score model; the reports are
+[reports/01_data_exploration.md](reports/01_data_exploration.md) and
+[reports/02_score_model.md](reports/02_score_model.md).
 
 Tests and style checks:
 
@@ -60,6 +66,34 @@ Tests and style checks:
 
 On Windows, replace `.venv/bin/` with `.venv\Scripts\`.
 
+## Score model
+
+The Answer panel uses the Scorecard formula recovered in phase 1. It needs no
+training and no data file. Given the eight factor scores of a household,
+`predict` returns the final score, the vulnerability category and how many
+points each factor contributes:
+
+```python
+from src.score_model import predict
+
+result = predict(
+    {
+        "Demographics.HH.Head": 2.70,
+        "Demographics.Language": 1.0,
+        "Demographics.Profiles": 1.0,
+        "Demographics.Documentation": 1.0,
+        "Needs_and_Coping.BasicNeeds": 1.78,
+        "Needs_and_Coping.Housing": 2.12,
+        "Needs_and_Coping.Neg.mechanism": 1.79,
+        "Needs_and_Coping.Dependency": 1.0,
+    }
+)
+# result["score"] 30.96, result["category"] "Moderate", result["attributions"]
+```
+
+What the model can and cannot be used for is in the
+[model card](reports/model_card.md).
+
 ## Repository layout
 
 ```
@@ -67,8 +101,9 @@ app/        Sentinella prototype
 data/       Synthetic sample (not tracked) and its README
 docs/       Challenge brief
 notebooks/  Analyses, numbered in the order they run
-reports/    Written reports, with figures/ (PNG) and tables/ (CSV)
+reports/    Written reports and model card, with figures/ (PNG) and tables/ (CSV)
 src/        Python code imported by the notebooks, tests and app
+tests/      Unit tests
 ```
 
 ## Ground rules
