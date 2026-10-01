@@ -1,0 +1,59 @@
+{
+  "phase_1_data_exploration": {
+    "households": 1900,
+    "columns": 26,
+    "block_score_formula_max_abs_error": 9.346273088794987e-09,
+    "final_score_formula_max_abs_error": 1.5439257857963185e-05,
+    "vulnerability_index_formula_max_abs_error": 6.046123601777253e-10,
+    "final_score_block_weights": [
+      1.032181,
+      0.967819
+    ],
+    "final_score_minus_block_sum_range": [
+      -1.47,
+      1.02
+    ],
+    "final_score_possible_range": [
+      0.0,
+      100.0
+    ],
+    "final_score_observed_max": 81.13,
+    "category_index_cutpoints": [
+      2.7,
+      2.9,
+      3.5
+    ],
+    "category_final_score_cutpoints": [
+      24.27,
+      31.21,
+      52.01
+    ],
+    "category_reproduced": 1890,
+    "category_not_reproduced": 10,
+    "distinct_factor_combinations": 493,
+    "possible_factor_combinations": 13824,
+    "interaction_mean_points": 3.9,
+    "inclusion_rate_all_households": 0.2247,
+    "inclusion_rate_all_households_ci": [
+      0.2065,
+      0.2441
+    ],
+    "inclusion_rate_by_category": {
+      "Low": 0.209,
+      "Moderate": 0.2234,
+      "High": 0.25,
+      "Severe": 0.2017
+    },
+    "inclusion_rate_by_month_range": [
+      0.0274,
+      0.4356
+    ],
+    "cramers_v_category_vs_eligibility": 0.019,
+    "cramers_v_month_vs_eligibility": 0.314,
+    "inclusion_rate_with_negative_flag": 0.2231,
+    "inclusion_rate_without_negative_flag": 0.225,
+    "duplicate_flagged": 48,
+    "duplicate_flagged_with_duplicate_status": 1,
+    "final_score_month_trend_p_value": 0.647
+  }
+}

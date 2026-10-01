@@ -1,0 +1,14 @@
+constant,value
+Geometric mean of the demographic factors at their highest levels (G_D),2.48829412789279
+Geometric mean of the needs and coping factors at their highest levels (G_N),2.395491978998179
+"Demographics score scale, 50 / (G_D - 1)",33.59550982761237
+"Needs and coping score scale, 50 / (G_N - 1)",35.829657749731325
+"Final score scale, 100 / (G_D + G_N - 2)",34.676635607975356
+Weight of the demographics score in the final score,1.032180663008555
+Weight of the needs and coping score in the final score,0.967819336991445
+"Vulnerability index cutpoint, Low | Moderate",2.7
+"Final score at that cutpoint, Low | Moderate",24.273644925582754
+"Vulnerability index cutpoint, Moderate | High",2.9
+"Final score at that cutpoint, Moderate | High",31.208972047177816
+"Vulnerability index cutpoint, High | Severe",3.5
+"Final score at that cutpoint, High | Severe",52.01495341196304

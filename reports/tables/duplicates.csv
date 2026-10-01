@@ -1,0 +1,6 @@
+check,value
+Exact duplicate rows (all 26 columns),14
+Rows that have an exact duplicate,25
+Distinct combinations of the 8 factor scores,493
+Possible combinations of the 8 factor scores,13824
+Rows whose factor combination occurs more than once,1658

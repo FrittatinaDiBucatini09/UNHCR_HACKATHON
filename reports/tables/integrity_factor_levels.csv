@@ -1,0 +1,9 @@
+factor,documented_levels,observed_levels,n_levels,match
+Head of household,"1.00, 1.60, 2.07, 2.70","1.00, 1.60, 2.07, 2.70",4,True
+Language barrier,"1.00, 1.53, 2.05","1.00, 1.53, 2.05",3,True
+Specific needs,"1.00, 1.25, 2.58, 3.25","1.00, 1.25, 2.58, 3.25",4,True
+Documentation,"1.00, 1.56, 2.13","1.00, 1.56, 2.13",3,True
+Basic needs,"1.00, 1.78","1.00, 1.78",2,True
+Housing,"1.00, 1.50, 2.12, 2.82","1.00, 1.50, 2.12, 2.82",4,True
+Negative coping,"1.00, 1.79, 2.58","1.00, 1.79, 2.58",3,True
+Dependency,"1.00, 1.04, 1.74, 2.54","1.00, 1.04, 1.74, 2.54",4,True

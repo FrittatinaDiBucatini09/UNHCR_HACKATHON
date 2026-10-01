@@ -1,0 +1,19 @@
+target,form,fitted_parameters,r2,mae,max_abs_error,note
+Demographics score,Linear,5,0.991125286749271,0.5654372064903797,5.450278000716956,
+Demographics score,Linear in log factors,5,0.9881377976401291,0.7650164840520486,6.9379523562527865,
+Demographics score,Log-linear,5,0.9018817749855902,1.2865289503110904,21.332789038977886,"log score on log factors; only the 1,244 rows with a score above 0"
+Demographics score,Multiplicative,5,1.0,1.0163863881523501e-09,6.1229741277202265e-09,"scale x (product of factor powers - 1); scale 33.596, exponents 0.250, 0.250, 0.250, 0.250"
+Demographics score,Lookup table,55,1.0,1.2270886061646468e-16,1.7763568394002505e-15,in-sample only; covers 55 of 144 possible combinations
+Demographics score,Recovered formula,0,1.0,1.0310451521795316e-09,4.8363162363784795e-09,rescaled geometric mean of the factor scores; no fitted parameters
+Needs and coping score,Linear,5,0.9932789160668971,0.6204600785572658,5.482712033151749,
+Needs and coping score,Linear in log factors,5,0.991616901560141,0.7437315919644185,4.692459777847844,
+Needs and coping score,Log-linear,5,0.914944376390531,2.128898159209128,12.973131696450494,"log score on log factors; only the 1,808 rows with a score above 0"
+Needs and coping score,Multiplicative,5,1.0,2.1745832638680142e-09,8.473683976717439e-09,"scale x (product of factor powers - 1); scale 35.830, exponents 0.250, 0.250, 0.250, 0.250"
+Needs and coping score,Lookup table,70,1.0,1.0260798059167236e-16,3.552713678800501e-15,in-sample only; covers 70 of 96 possible combinations
+Needs and coping score,Recovered formula,0,1.0,3.0668331448649004e-09,9.346273088794987e-09,rescaled geometric mean of the factor scores; no fitted parameters
+Final score,Linear,9,0.9936715151471709,0.84530602542918,7.207407394815895,
+Final score,Linear in log factors,9,0.9920030323061685,1.0286332482301785,6.79137392710097,
+Final score,Log-linear,9,0.8389982786167822,3.4563267526790553,50.83866024162842,"log score on log factors; only the 1,850 rows with a score above 0"
+Final score,Multiplicative,9,0.9957894556275152,0.6907712054460544,6.8607211966553585,"scale x (product of factor powers - 1); scale 89.888, exponents 0.096, 0.097, 0.093, 0.098, 0.104, 0.114, 0.110, 0.119"
+Final score,Lookup table,493,1.0,2.596753221807471e-16,7.105427357601002e-15,"in-sample only; covers 493 of 13,824 possible combinations"
+Final score,Recovered formula,0,0.9999999999998447,4.897321540349223e-06,1.5439257857963185e-05,rescaled geometric mean of the factor scores; no fitted parameters

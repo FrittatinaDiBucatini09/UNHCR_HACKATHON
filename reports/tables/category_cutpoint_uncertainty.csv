@@ -1,0 +1,8 @@
+statistic,value
+Possible combinations scoring inside the Low | Moderate interval,66.0
+Possible combinations scoring inside the Moderate | High interval,48.0
+Possible combinations scoring inside the High | Severe interval,122.0
+Possible combinations of the 8 factor levels,13824.0
+Possible combinations categorised differently by index and final-score cutpoints,52.0
+Sample households categorised differently by the two sets of cutpoints,0.0
+Highest possible final score,100.0

@@ -1,0 +1,43 @@
+column,value_recorded,value_english,documented,observed,match
+Eligibility target,INCLUSION,Inclusion,427,427,True
+Eligibility target,EXCLUSION,Exclusion,1473,1473,True
+Eligibility status,Elegible,Eligible,414,414,True
+Eligibility status,Elegible por Proceso Acelerado,"Eligible, accelerated process",13,13,True
+Eligibility status,Lista de Reserva,Waiting list,451,451,True
+Eligibility status,No Elegible,Not eligible,932,932,True
+Eligibility status,No Elegible por Intenciones,"Not eligible, stated intentions",52,52,True
+Eligibility status,No Elegible por Duplicidad,"Not eligible, duplicate registration",38,38,True
+Vulnerability category,Vulnerabilidad Baja,Low,775,775,True
+Vulnerability category,Vulnerabilidad Moderada,Moderate,394,394,True
+Vulnerability category,Vulnerabilidad Elevada,High,612,612,True
+Vulnerability category,Vulnerabilidad Severa,Severe,119,119,True
+Dependency category,low,Low,1148,1148,True
+Dependency category,average,Average,610,610,True
+Dependency category,complete,Complete,94,94,True
+Dependency category,high,High,48,48,True
+Sex of household head,jefatura_femenina,Female-headed,484,484,True
+Sex of household head,jefatura_masculina,Male-headed,491,491,True
+Sex of household head,(blank),Not applicable,925,925,True
+Sole carer,si,Yes,373,373,True
+Sole carer,no,No,602,602,True
+Sole carer,(blank),Not applicable,925,925,True
+Speaks Spanish,espanol_uno_mas_adultos,One or more adults,1622,1622,True
+Speaks Spanish,espanol_ningun_adulto,No adult,278,278,True
+Adult illiteracy,adultos_ninguno_analfabeta,No adult,1664,1664,True
+Adult illiteracy,adultos_uno_mas_analfabeta,One or more adults,236,236,True
+Asylum procedure flag,0,0,771,771,True
+Asylum procedure flag,-500,-500,155,155,True
+Asylum procedure flag,500,+500,14,14,True
+Asylum procedure flag,(blank),Not applicable,960,960,True
+Intentions flag,0,0,1844,1844,True
+Intentions flag,-500,-500,56,56,True
+Duplicate flag,0,0,1852,1852,True
+Duplicate flag,-500,-500,48,48,True
+UNHCR field office,sotap,sotap,1278,1278,True
+UNHCR field office,fupal,fupal,190,190,True
+UNHCR field office,foten,foten,186,186,True
+UNHCR field office,pcr_cdmx,pcr_cdmx,127,127,True
+UNHCR field office,futij,futij,47,47,True
+UNHCR field office,fomon,fomon,36,36,True
+UNHCR field office,fusal,fusal,15,15,True
+UNHCR field office,(blank),Blank,21,21,True
