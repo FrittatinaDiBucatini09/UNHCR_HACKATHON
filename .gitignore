@@ -1,0 +1,126 @@
+# ============================================================
+# Sentinella - .gitignore (macOS + Windows, Python, Colab)
+# ============================================================
+
+# ---------- macOS ----------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+Icon?
+
+# ---------- Windows ----------
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ---------- Virtual environments ----------
+.venv/
+venv/
+env/
+ENV/
+.conda/
+
+# ---------- Jupyter / Colab ----------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+.virtual_documents/
+sample_data/
+
+# ---------- Editors ----------
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*~
+
+# ---------- AI agents ----------
+# Keep CLAUDE.md, AGENTS.md and .claude/settings.json in git;
+# ignore personal, machine-specific settings.
+.claude/settings.local.json
+CLAUDE.local.md
+
+# ---------- Secrets ----------
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.key
+*.pem
+credentials*.json
+service_account*.json
+
+# ---------- Data ----------
+# Hackathon data stays out of git: download it as described in the README.
+data/*
+!data/README.md
+!data/.gitkeep
+
+# ---------- ML artifacts ----------
+AutogluonModels/
+catboost_info/
+lightning_logs/
+mlruns/
+wandb/
+*.ckpt
+models/*
+!models/.gitkeep
+!models/*.json
+!models/*.joblib
+
+# ---------- Logs and temp ----------
+*.log
+*.tmp
+tmp/
+.cache/
+
+# ---------- Local app data (Sentinella logs, simulations) ----------
+*.sqlite
+*.sqlite3
+*.db
+
+# ---------- Local tooling (not part of the project) ----------
+AGENT_RULES.md
+AGENTS.md
+CLAUDE.md
+prompt.md
+CLAUDE.local.md
+.claude/
+.codex/
+.cursor/
+.cursorrules
+.windsurf/
+.continue/
+.aider*
+.github/copilot-instructions.md
+prompts/
+scratch/
