@@ -16,11 +16,14 @@ if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
 st.set_page_config(page_title="Sentinella", layout="wide")
+st.sidebar.markdown("### Sentinella")
+st.sidebar.caption("UNHCR challenge · unofficial hackathon prototype")
 st.navigation(
-    [
-        st.Page("caseworker.py", title="Caseworker", default=True),
-        st.Page("committee.py", title="Committee review"),
-        st.Page("monitor.py", title="Monitor"),
-        st.Page("about.py", title="About"),
-    ]
+    {
+        "Start": [st.Page("home.py", title="Choose your workspace", default=True)],
+        "Caseworker": [st.Page("caseworker.py", title="Review cases")],
+        "Manager": [st.Page("monitor.py", title="Dashboard")],
+        "Independent review": [st.Page("committee.py", title="Committee review")],
+        "Prototype": [st.Page("about.py", title="About and limits")],
+    }
 ).run()
