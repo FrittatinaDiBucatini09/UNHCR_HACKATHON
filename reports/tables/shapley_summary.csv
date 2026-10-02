@@ -1,9 +1,0 @@
-factor,block,mean_attribution,share_of_mean_score,households_where_largest
-Housing,Needs and coping,7.030109252268941,0.25340547195966934,824
-Negative coping,Needs and coping,6.805033566044785,0.24529245288021895,433
-Basic needs,Needs and coping,4.766336926329311,0.17180612917864124,28
-Specific needs,Demographics,3.969004649077785,0.14306569929693058,343
-Head of household,Demographics,3.0358244966164927,0.10942853257985159,169
-Language barrier,Demographics,1.1712857947189452,0.04221986016997052,32
-Dependency,Needs and coping,0.8089531257413103,0.02915931193467096,15
-Documentation,Demographics,0.15598354775105186,0.005622542000046685,6

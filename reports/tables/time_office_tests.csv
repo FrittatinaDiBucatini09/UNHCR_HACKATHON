@@ -1,4 +1,0 @@
-test,effect_measure,effect_size,p_value
-"Kruskal-Wallis, final score across months",eta,0.0656366627509652,0.9671084054531961
-"Spearman, month order against final score",rho,0.010520118416356939,0.6467568692753335
-"Kruskal-Wallis, final score across offices",eta,0.23126958937013528,2.223264675520047e-22

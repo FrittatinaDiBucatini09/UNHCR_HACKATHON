@@ -1,5 +1,0 @@
-flag,matching_status,flagged,flagged_with_matching_status,matching_status_recorded,matching_status_without_flag,flagged_and_included
-Intentions flag,"Not eligible, stated intentions",56,1.0,52.0,51.0,18
-Duplicate flag,"Not eligible, duplicate registration",48,1.0,38.0,37.0,15
-Asylum procedure flag,no specific status,155,,,,23
-Any of the three flags at -500,,251,,,,56

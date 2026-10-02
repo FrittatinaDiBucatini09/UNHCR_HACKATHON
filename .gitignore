@@ -64,8 +64,7 @@ sample_data/
 *~
 
 # ---------- AI agents ----------
-# Keep CLAUDE.md, AGENTS.md and .claude/settings.json in git;
-# ignore personal, machine-specific settings.
+# Ignore personal, machine-specific settings.
 .claude/settings.local.json
 CLAUDE.local.md
 
@@ -124,3 +123,30 @@ CLAUDE.local.md
 .github/copilot-instructions.md
 prompts/
 scratch/
+
+# ---------- Code-only release boundary ----------
+wiki/
+raw/
+transcripts/
+docs/
+reports/
+notebooks/
+.agents/
+*.mp3
+*.ogg
+*.wav
+*.mp4
+*.zip
+*.pdf
+*.docx
+*.xlsx
+*.xls
+
+# Optional analysis modules are retained locally, outside the runtime release.
+src/charts.py
+src/descriptive.py
+src/features.py
+src/integrity.py
+src/model_comparison.py
+src/plot_style.py
+src/reporting.py

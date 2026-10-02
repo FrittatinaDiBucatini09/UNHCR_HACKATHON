@@ -1,8 +1,0 @@
-candidate,feature_columns,uses_household_attributes,fitted_parameters,excluded_columns_used
-Recovered formula,8,False,0,0
-Linear,8,False,9,0
-Linear in log factors,8,False,9,0
-Linear with block interactions,20,False,21,0
-Ridge with interactions and attributes,30,True,31,0
-LightGBM,8,False,"up to 6,000 leaf values",0
-LightGBM with attributes,18,True,"up to 6,000 leaf values",0

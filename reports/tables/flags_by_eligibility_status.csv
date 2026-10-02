@@ -1,9 +1,0 @@
-flag,level,Eligible,"Eligible, accelerated process",Waiting list,Not eligible,"Not eligible, stated intentions","Not eligible, duplicate registration"
-Asylum procedure flag,-500,23,0,43,84,2,3
-Asylum procedure flag,0,180,2,169,373,25,22
-Asylum procedure flag,+500,2,0,4,8,0,0
-Asylum procedure flag,Not applicable,209,11,235,467,25,13
-Intentions flag,-500,18,0,9,28,1,0
-Intentions flag,0,396,13,442,904,51,38
-Duplicate flag,-500,15,0,10,21,1,1
-Duplicate flag,0,399,13,441,911,51,37

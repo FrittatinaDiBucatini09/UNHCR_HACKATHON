@@ -1,8 +1,0 @@
-variable,measure,value,test,p_value
-Vulnerability category,"Cramér's V, bias-corrected",0.019264237880778592,chi-square,0.29497244226973673
-Month,"Cramér's V, bias-corrected",0.3138121000261259,chi-square,1.355921239563652e-35
-UNHCR field office,"Cramér's V, bias-corrected",0.0,chi-square,0.8653752896277207
-Asylum procedure flag,"Cramér's V, bias-corrected",0.042302262913645645,chi-square,0.093698849717353
-Intentions flag,"Cramér's V, bias-corrected",0.03322037311199892,chi-square,0.11023622415650768
-Duplicate flag,"Cramér's V, bias-corrected",0.024890028160142557,chi-square,0.19348557942973452
-Final score,point-biserial r,0.034248929634681416,Mann-Whitney U,0.06323208490453391

@@ -1,4 +1,0 @@
-boundary,final_score_interval_from,final_score_interval_to,index_interval_from,index_interval_to,index_cutpoint,final_score_at_index_cutpoint,lower_category_rows_above_interval,fewest_mismatches_any_threshold
-Low | Moderate,24.254152154793587,24.597090538408825,2.699437924,2.709327594,2.7,24.273644925582754,0,0
-Moderate | High,31.09068863222006,31.269381591707777,2.896589272,2.901742121,2.9,31.208972047177816,10,10
-High | Severe,51.689151876183416,52.20547205133984,3.490604678,3.505494188,3.5,52.01495341196304,0,0
