@@ -1,21 +1,5 @@
-# Python 3.12. Direct dependencies only, so the same file installs on macOS and Windows.
-
-# Analysis and modelling
+# Python 3.12: packages required by the application and scoring engine.
 numpy==2.5.3
 pandas==3.0.6
 scipy==1.18.1
-matplotlib==3.11.2
-scikit-learn==1.9.1
-lightgbm==4.7.0
-shap==0.52.0
-
-# Notebooks (kernel and headless execution)
-ipykernel==7.4.0
-nbconvert==7.17.1
-
-# Sentinella prototype app
 streamlit==1.64.0
-
-# Tests and code style
-pytest==9.1.1
-ruff==0.16.9
