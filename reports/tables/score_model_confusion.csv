@@ -1,0 +1,33 @@
+model,recorded,predicted,households
+Recovered formula,Low,Low,155
+Recovered formula,Low,Moderate,0
+Recovered formula,Low,High,0
+Recovered formula,Low,Severe,0
+Recovered formula,Moderate,Low,0
+Recovered formula,Moderate,Moderate,77
+Recovered formula,Moderate,High,2
+Recovered formula,Moderate,Severe,0
+Recovered formula,High,Low,0
+Recovered formula,High,Moderate,0
+Recovered formula,High,High,122
+Recovered formula,High,Severe,0
+Recovered formula,Severe,Low,0
+Recovered formula,Severe,Moderate,0
+Recovered formula,Severe,High,0
+Recovered formula,Severe,Severe,24
+LightGBM,Low,Low,154
+LightGBM,Low,Moderate,1
+LightGBM,Low,High,0
+LightGBM,Low,Severe,0
+LightGBM,Moderate,Low,1
+LightGBM,Moderate,Moderate,73
+LightGBM,Moderate,High,5
+LightGBM,Moderate,Severe,0
+LightGBM,High,Low,0
+LightGBM,High,Moderate,2
+LightGBM,High,High,120
+LightGBM,High,Severe,0
+LightGBM,Severe,Low,0
+LightGBM,Severe,Moderate,0
+LightGBM,Severe,High,1
+LightGBM,Severe,Severe,23

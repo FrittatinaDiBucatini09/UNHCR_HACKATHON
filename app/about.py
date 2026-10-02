@@ -2,20 +2,23 @@
 
 import streamlit as st
 
-from app import state
+from app import brand, state
 
 demo = state.demo()
-st.title("About Sentinella")
+st.title("About Sentinella", icon=":material/info:")
 st.markdown(
     f"""
 This is an unofficial hackathon prototype for the Cashy Oversight Challenge,
 not an operational UNHCR service. All case records come from the released
-synthetic S8 sample, not actual households.
+synthetic S8 sample, not actual households. The UNHCR logo marks the
+challenge the prototype answers; it does not mean UNHCR endorses the
+prototype.
 
-### Current caseworker demonstration
+### Officer workspace
 
-One demonstration operator has **15 selectable cases**, labelled pending or
-completed. The usual flow is a structured household summary, source-record
+One demonstration officer has **15 cases**, chosen from a dropdown by case
+number; a check mark shows the cases whose final decision is recorded. The
+usual flow is a structured household summary, source-record
 access, optional opening of AI score/category and explanation, then a human
 Include/Exclude decision with a mandatory justification.
 
@@ -33,10 +36,11 @@ the full operational questionnaire or all administrative evidence.
 
 ### Manager and independent review
 
-The dashboard separates **illustrative mock**, **entered app decisions** and
-the optional legacy simulated year. Mock decisions, assessments and timings
-are invented presentation examples, never real activity or observed performance.
-Time includes pauses and is not a measurement of attention.
+The dashboard shows either the **simulated year**, in which simulated
+caseworkers and a simulated committee follow the demo values, or the
+**decisions entered in the app**. The two are never pooled, and neither
+describes a real operation. Alerts close only with a written explanation from
+their named owner. Time includes pauses and is not a measurement of attention.
 
 The commission sees source case evidence without AI advice. Random audit and
 targeted/manual review remain separate. Commission disagreement does not itself
@@ -58,3 +62,4 @@ sentinel in fifteen cases is curated, not the configured operational injection
 rate. A full literature review and evaluation protocol are still pending.
 """
 )
+st.caption(brand.NOTICE)

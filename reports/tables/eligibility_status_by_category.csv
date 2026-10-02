@@ -1,0 +1,25 @@
+eligibility_status,vulnerability_category,n,share_of_category
+Eligible,Low,154,0.19870967741935483
+Eligible,Moderate,85,0.21573604060913706
+Eligible,High,151,0.24673202614379086
+Eligible,Severe,24,0.20168067226890757
+"Eligible, accelerated process",Low,8,0.01032258064516129
+"Eligible, accelerated process",Moderate,3,0.007614213197969543
+"Eligible, accelerated process",High,2,0.0032679738562091504
+"Eligible, accelerated process",Severe,0,0.0
+Waiting list,Low,205,0.2645161290322581
+Waiting list,Moderate,89,0.22588832487309646
+Waiting list,High,123,0.20098039215686275
+Waiting list,Severe,34,0.2857142857142857
+Not eligible,Low,366,0.472258064516129
+Not eligible,Moderate,203,0.5152284263959391
+Not eligible,High,309,0.5049019607843137
+Not eligible,Severe,54,0.453781512605042
+"Not eligible, stated intentions",Low,25,0.03225806451612903
+"Not eligible, stated intentions",Moderate,8,0.02030456852791878
+"Not eligible, stated intentions",High,15,0.024509803921568627
+"Not eligible, stated intentions",Severe,4,0.03361344537815126
+"Not eligible, duplicate registration",Low,17,0.02193548387096774
+"Not eligible, duplicate registration",Moderate,6,0.015228426395939087
+"Not eligible, duplicate registration",High,12,0.0196078431372549
+"Not eligible, duplicate registration",Severe,3,0.025210084033613446

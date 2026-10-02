@@ -36,7 +36,8 @@ def case_list(book: casework.Casebook, office: str) -> pd.DataFrame:
 
 
 def case_label(number: int, done: bool) -> str:
-    return f"Case {number:02d} — {'Completed' if done else 'To review'}"
+    """The case's number, with a check mark once its decision is recorded."""
+    return f"Case {number:02d} ✓" if done else f"Case {number:02d}"
 
 
 def score_only_reasoning(text: str) -> str:

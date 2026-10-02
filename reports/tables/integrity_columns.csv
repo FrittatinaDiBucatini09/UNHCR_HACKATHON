@@ -1,0 +1,27 @@
+column,english_name,group,dtype,blank,distinct_values
+month,Month,Interview record,str,0,14
+Elegibilidad,Eligibility status,Outcome,str,0,6
+Vulnerability_Category,Vulnerability category,Aggregated score,str,0,4
+Demographics.HH.Head,Head of household,Scorecard factor score,float64,0,4
+Demographics.Language,Language barrier,Scorecard factor score,float64,0,3
+Demographics.Profiles,Specific needs,Scorecard factor score,float64,0,4
+Demographics.Documentation,Documentation,Scorecard factor score,float64,0,3
+Needs_and_Coping.BasicNeeds,Basic needs,Scorecard factor score,float64,0,2
+Needs_and_Coping.Housing,Housing,Scorecard factor score,float64,0,4
+Needs_and_Coping.Neg.mechanism,Negative coping,Scorecard factor score,float64,0,3
+Needs_and_Coping.Dependency,Dependency,Scorecard factor score,float64,0,4
+OficinaACNUR,UNHCR field office,Interview record,str,21,7
+NumIntegrantes,Household size,Household attribute,int64,0,10
+dependencyCategory,Dependency category,Household attribute,str,0,4
+FemaleHeadedHousehold,Sex of household head,Household attribute,str,925,2
+CuidadorSolo,Sole carer,Household attribute,str,925,2
+HablaEspanol,Speaks Spanish,Household attribute,str,0,2
+Analfabeta_si,Adult illiteracy,Household attribute,str,0,2
+ScoreCOMAR_PIL,Asylum procedure flag,Administrative flag,float64,960,3
+ScoreIntenciones,Intentions flag,Administrative flag,int64,0,2
+ScoreDuplicidad,Duplicate flag,Administrative flag,int64,0,2
+Demographics_Score,Demographics score,Aggregated score,float64,0,55
+NeedsandCoping_Score,Needs and coping score,Aggregated score,float64,0,70
+Vulnerability_Score,Vulnerability index,Aggregated score,float64,0,493
+FinalScore,Final score,Aggregated score,float64,0,493
+EligibilityTarget,Eligibility target,Outcome,str,0,2

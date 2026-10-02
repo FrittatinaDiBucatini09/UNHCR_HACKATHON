@@ -215,13 +215,12 @@ def decision_times(
 ) -> pd.DataFrame:
     """Recorded time from opening a case to submitting the decision, per group.
 
-    Ordinary simulation records have no times. Authored presentation mocks may
-    carry illustrative times, but their source must remain separate. Time is not
-    attention: a case can stay open while the
+    Only decisions entered in the app carry times; the simulation does not model
+    them. Recorded time is not attention: a case can stay open while the
     caseworker does something else, and a quick decision can be a careful one.
 
     Args:
-        decisions: Decisions with both timestamps; never pool different sources.
+        decisions: Decisions; those without both timestamps are left out.
         by: Columns to group by: caseworker, office, month or variant.
     """
     columns = ["caseworker", "office", "month", "variant", "seconds"]

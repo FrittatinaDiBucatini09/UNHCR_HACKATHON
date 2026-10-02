@@ -1,0 +1,10 @@
+check,documented,observed,consistent
+Rows,"1,900","1,900",True
+Columns,26,26,True
+Documented values whose count matches,42,42,True
+Factors whose levels match the printed lists,8,8,True
+"Factors with three or four levels, as the Annex I text says",8,7,False
+"Score minima, maxima and means within 0.05 of Annex I",12,12,True
+Sex of head and sole carer blank exactly for single-person households,925,925,True
+Rows breaking INCLUSION = one of the two Elegible statuses,0,0,True
+Exact duplicate rows,not stated,14,

@@ -2,29 +2,36 @@
 
 import streamlit as st
 
+from app import brand
+
+st.image(str(brand.LOGO), width=280)
 st.title("Sentinella")
 st.subheader("Human oversight, one case at a time")
-st.write(
-    "Choose your workspace. This is a hackathon prototype, not an operational UNHCR service."
-)
-operator, manager = st.columns(2)
-with operator.container(border=True):
-    st.subheader("Caseworker")
+st.caption(brand.NOTICE)
+officer, manager = st.columns(2)
+with officer.container(border=True):
+    st.subheader("Officer", icon=":material/assignment_ind:")
     st.write(
-        "Review 15 demonstration cases, inspect the record and record a justified decision."
+        "Review 15 demonstration cases, check the record against the AI "
+        "assessment and record a justified decision."
     )
     st.page_link(
-        "caseworker.py", label="Open caseworker workspace", icon=":material/assignment:"
+        "caseworker.py",
+        label="Open the officer workspace",
+        icon=":material/arrow_forward:",
     )
 with manager.container(border=True):
-    st.subheader("Manager")
+    st.subheader("Manager", icon=":material/monitoring:")
     st.write(
-        "Compare independent reviews, inspect decision time and refer cases for review."
+        "Follow sentinels, the random audit and targeted reviews, close alerts "
+        "with an explanation and refer cases for blind review."
     )
     st.page_link(
-        "monitor.py", label="Open manager dashboard", icon=":material/monitoring:"
+        "monitor.py",
+        label="Open the manager dashboard",
+        icon=":material/arrow_forward:",
     )
 st.caption("Independent committee review remains a separate, AI-blind workspace.")
 st.page_link(
-    "committee.py", label="Open independent review", icon=":material/fact_check:"
+    "committee.py", label="Open committee review", icon=":material/fact_check:"
 )

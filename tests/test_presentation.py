@@ -6,11 +6,11 @@ from pathlib import Path
 import pytest
 from streamlit.testing.v1 import AppTest
 
-from app import mock_data, presentation, state
+from app import presentation, state
 from src.data_dictionary import OFFICE_BLANK
 from src.dataset import DATA_PATH, load_sample, to_english
-from src.sentinella import casework, config, metrics, store
-from src.sentinella.schema import Decision, InitialAssessment, Review, is_sentinel
+from src.sentinella import casework, config, store
+from src.sentinella.schema import Decision, InitialAssessment, is_sentinel
 
 ROOT = Path(__file__).resolve().parents[1]
 DEMO = config.load()
@@ -55,7 +55,8 @@ def test_presentation_has_fifteen_stable_cases_with_correct_positions(context):
     assert queue.iloc[2]["flow"] == "human-first"
     assert (queue.drop(2)["flow"] == "summary-first").all()
     assert "sentinel" not in presentation.case_label(2, False).lower()
-    assert "Completed" in presentation.case_label(2, True)
+    assert presentation.case_label(2, False) == "Case 02"
+    assert presentation.case_label(2, True) == "Case 02 ✓"
 
 
 def test_reasoning_hides_only_eligibility_recommendation():
@@ -90,23 +91,13 @@ def test_initial_assessment_is_persistent_and_cannot_be_duplicated(tmp_path):
         )
 
 
-def test_mock_is_separate_deterministic_and_has_time_and_reviews(context):
-    book, staff = context
-    db = mock_data.connection(book, staff, DEMO)
-    decisions = store.load(db, Decision)
-    assert len(decisions) == 48 and all(d.simulated for d in decisions)
-    assert len(store.load(db, Review)) == 30
-    assert metrics.decision_times(decisions)["n"].sum() == 48
-    again = mock_data.connection(book, staff, DEMO)
-    assert store.load(again, Decision) == decisions
-
-
 def test_caseworker_submission_and_completed_readonly_view(app_context):
     _, _, database = app_context
     at = AppTest.from_file(ROOT / "app/caseworker.py", default_timeout=30).run()
     assert not at.exception
-    assert [w.label for w in at.sidebar.selectbox] == ["Case"]
-    assert len(at.sidebar.selectbox[0].options) == 15
+    assert not at.sidebar.selectbox
+    cases = next(w for w in at.main.selectbox if w.label == "Case")
+    assert cases.options == [f"Case {n:02d}" for n in range(1, 16)]
     assert len(at.metric) == 0
     select(at, "Cashy-AI assessment", "Show score and explanation")
     assert {m.label for m in at.metric} == {
@@ -123,6 +114,9 @@ def test_caseworker_submission_and_completed_readonly_view(app_context):
     assert not at.exception and len(at.radio) == 0
     assert any("read-only" in s.value for s in at.success)
     assert len(store.load(store.connect(database), Decision)) == 1
+    cases = next(w for w in at.main.selectbox if w.label == "Case")
+    assert cases.options[0] == "Case 01 ✓"
+    assert not any("✓" in label for label in cases.options[1:])
 
 
 def test_human_first_ai_gate_persistence_and_changed_final_decision(app_context):
@@ -152,15 +146,39 @@ def test_human_first_ai_gate_persistence_and_changed_final_decision(app_context)
     assert store.load(db, Decision)[0].variant == "C"
 
 
-def test_manager_mock_and_actual_data_are_separate(app_context):
+def test_manager_dashboard_restores_streams_and_keeps_sources_apart(
+    app_context, monkeypatch, tmp_path
+):
     _, _, database = app_context
-    at = AppTest.from_file(ROOT / "app/monitor.py", default_timeout=30).run()
+    simulation = tmp_path / "simulation.sqlite"
+    monkeypatch.setattr(store, "SIMULATION_DATABASE", simulation)
+    at = AppTest.from_file(ROOT / "app/monitor.py", default_timeout=120).run()
     assert not at.exception
-    assert any("ILLUSTRATIVE MOCK" in w.value for w in at.warning)
-    assert at.metric[0].value == "48"
-    select(at, "Data source", "Entered in the app")
-    assert at.metric[0].value == "0"
+    next(b for b in at.button if b.label == "Generate the simulated year").click()
+    at.run()
+    assert not at.exception and simulation.exists()
+    assert any("Simulated year" in w.value for w in at.warning)
+    simulated = store.load(store.connect(simulation), Decision)
+    assert at.metric[0].value == f"{len(simulated):,}"
+    assert len(at.tabs) == 8
+    assert not any(b.label == "Close alert" for b in at.button)
+    select(at, "Viewing as", "Office manager, sotap")
+    assert any(b.label == "Close alert" for b in at.button)
+    at.segmented_control[0].set_value("Entered in the app").run()
+    assert not at.exception and at.metric[0].value == "0"
     assert store.load(store.connect(database), Decision) == []
+
+
+def test_sidebar_links_officer_and_manager_and_folds_the_rest(app_context):
+    at = AppTest.from_file(ROOT / "app/streamlit_app.py", default_timeout=30).run()
+    assert not at.exception
+    links = [link.proto.label for link in at.sidebar.get("page_link")]
+    folded = [
+        link.proto.label for link in at.sidebar.get("popover")[0].get("page_link")
+    ]
+    assert links[:2] == ["Officer", "Manager"]
+    assert folded == ["Start page", "Committee review", "About and limits"]
+    assert links[2:] == folded
 
 
 def test_role_landing_and_independent_review_render(app_context):

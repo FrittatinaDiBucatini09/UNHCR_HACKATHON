@@ -18,7 +18,7 @@ decisions = {d.decision_id: d for d in store.load(connection, Decision)}
 reviews = store.load(connection, Review)
 waiting = audit.pending(store.load(connection, ReviewRequest), reviews)
 
-st.title("Committee review")
+st.title("Committee review", icon=":material/fact_check:")
 st.caption(
     "Each member votes on the household's record alone. Cashy's answer, the "
     "caseworker's decision and justification, and the reason the case was "

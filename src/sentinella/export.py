@@ -68,8 +68,8 @@ COLUMNS = {
     "Exclude means Cashy excluded a household the reference decision includes",
     "discordance_type": "how Cashy's answer was made discordant: input_misread, "
     "category_mismatch or reasoning_inconsistency",
-    "variant": "workflow variant of the caseworker screen, A or B; in the "
-    "simulation, baseline screen or changed screen",
+    "variant": "workflow of the officer workspace, A for summary first or C for "
+    "human first; in the simulation, baseline screen or changed screen",
     "decision": "the caseworker's decision, Include or Exclude",
     "action": "accepted or overridden: whether the caseworker's decision followed "
     "Cashy's displayed recommendation",

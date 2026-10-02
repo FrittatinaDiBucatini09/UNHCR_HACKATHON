@@ -15,15 +15,26 @@ ROOT = str(Path(__file__).resolve().parents[1])
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-st.set_page_config(page_title="Sentinella", layout="wide")
-st.sidebar.markdown("### Sentinella")
-st.sidebar.caption("UNHCR challenge · unofficial hackathon prototype")
-st.navigation(
-    {
-        "Start": [st.Page("home.py", title="Choose your workspace", default=True)],
-        "Caseworker": [st.Page("caseworker.py", title="Review cases")],
-        "Manager": [st.Page("monitor.py", title="Dashboard")],
-        "Independent review": [st.Page("committee.py", title="Committee review")],
-        "Prototype": [st.Page("about.py", title="About and limits")],
-    }
-).run()
+from app import brand
+
+st.set_page_config(page_title="Sentinella", page_icon=str(brand.EMBLEM), layout="wide")
+st.logo(str(brand.LOGO), icon_image=str(brand.EMBLEM), size="large")
+
+officer = st.Page("caseworker.py", title="Officer", icon=":material/assignment_ind:")
+manager = st.Page("monitor.py", title="Manager", icon=":material/monitoring:")
+secondary = [
+    st.Page("home.py", title="Start page", icon=":material/home:", default=True),
+    st.Page("committee.py", title="Committee review", icon=":material/fact_check:"),
+    st.Page("about.py", title="About and limits", icon=":material/info:"),
+]
+page = st.navigation([officer, manager, *secondary], position="hidden")
+
+# The two workspaces stay one click away; everything else sits in one dropdown.
+with st.sidebar:
+    st.page_link(officer)
+    st.page_link(manager)
+    with st.popover("More", icon=":material/menu:", width="stretch"):
+        for item in secondary:
+            st.page_link(item)
+    st.caption(brand.NOTICE)
+page.run()

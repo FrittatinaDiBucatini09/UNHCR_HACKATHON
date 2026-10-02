@@ -1,0 +1,4 @@
+example,score,category,recorded_score,recorded_category,lightgbm_score,lightgbm_category
+Household A,15.131550011268931,Low,15.13155099116565,Low,15.060766587581842,Low
+Household B,30.957750518173274,Moderate,30.95774633538465,Moderate,31.272241078461573,High
+Household C,60.65752599295623,Severe,60.65751703807895,Severe,60.58639579831975,Severe

@@ -1,0 +1,5 @@
+statistic,value
+Test households,380.0
+LightGBM prediction for the reference household (every factor at 1.0),0.039720282391367025
+Mean over households of the summed absolute attribution difference,1.2724873674725283
+Share of scoring households whose largest factor differs,0.0673854447439353

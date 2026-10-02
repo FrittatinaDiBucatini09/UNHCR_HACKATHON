@@ -1,0 +1,14 @@
+statistic,value
+Mean of final score minus block sum,-0.38564157679615596
+Standard deviation of the difference,0.4067925458065614
+Minimum difference,-1.4743343926150558
+Maximum difference,1.0233733499405346
+Share of rows with absolute difference above 0.5,0.44
+Share of rows with absolute difference above 1.0,0.06315789473684211
+Share of rows with absolute difference above 1.5,0.0
+Least-squares weight of the demographics score,1.0321809999999998
+Least-squares weight of the needs and coping score,0.9678190000000003
+Formula weight of the demographics score,1.032180663008555
+Formula weight of the needs and coping score,0.967819336991445
+"Max absolute difference, final score vs weighted sum (weights to 6 decimals)",7.105427357601002e-15
+"Max absolute difference, final minus block sum vs 0.032181 x block gap",1.6486811915683575e-14

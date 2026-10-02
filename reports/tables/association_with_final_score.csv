@@ -1,0 +1,20 @@
+input,group,measure,value,p_value,levels
+Housing,Scorecard factor score,Spearman rho,0.6283081299118837,3.205998236073953e-209,4
+Negative coping,Scorecard factor score,Spearman rho,0.6174744833847169,4.0105489383452675e-200,3
+Basic needs,Scorecard factor score,Spearman rho,0.5933236736229468,4.494963414346652e-181,2
+Specific needs,Scorecard factor score,Spearman rho,0.5595767651597731,5.136035097606973e-157,4
+Head of household,Scorecard factor score,Spearman rho,0.4969690975542842,4.529283448424458e-119,4
+Dependency category,Household attribute,eta,0.4094898702920523,9.558265161818843e-65,4
+Dependency,Scorecard factor score,Spearman rho,0.3853393316023823,2.6755175739676105e-68,4
+Sole carer,Household attribute,eta,0.32312536537087705,2.250837215397737e-43,3
+Sex of household head,Household attribute,eta,0.30522654444231506,3.9622556245186255e-40,3
+Household size,Household attribute,Spearman rho,0.26342020173202957,1.5832306504397787e-31,10
+UNHCR field office,Interview record,eta,0.23126958937013528,2.223264675520047e-22,8
+Adult illiteracy,Household attribute,eta,0.2188034294196832,6.684181302849882e-19,2
+Language barrier,Scorecard factor score,Spearman rho,0.19092634523770294,4.693157998289549e-17,3
+Speaks Spanish,Household attribute,eta,0.07125669570703651,0.0036686658052409995,2
+Month,Interview record,eta,0.0656366627509652,0.9671084054531961,14
+Intentions flag,Administrative flag,eta,0.04844736449489953,0.04047318520102347,2
+Asylum procedure flag,Administrative flag,eta,0.039900816305394486,0.4380748665121713,4
+Documentation,Scorecard factor score,Spearman rho,0.026917424808408877,0.2408986080818894,3
+Duplicate flag,Administrative flag,eta,0.016641907471658987,0.27759228531678715,2
