@@ -13,6 +13,7 @@ from src.sentinella.schema import (
     SENTINEL_PREFIX,
     Alert,
     Decision,
+    InitialAssessment,
     Review,
     ReviewRequest,
     Sentinel,
@@ -23,9 +24,10 @@ from src.sentinella.schema import (
 APP_DATABASE = REPO_ROOT / "data" / "sentinella.sqlite"
 SIMULATION_DATABASE = REPO_ROOT / "data" / "simulation.sqlite"
 
-Record = Decision | Review | ReviewRequest | Sentinel | Alert
+Record = Decision | InitialAssessment | Review | ReviewRequest | Sentinel | Alert
 TABLES = {
     Decision: "decisions",
+    InitialAssessment: "initial_assessments",
     Review: "reviews",
     ReviewRequest: "review_requests",
     Sentinel: "sentinels",
@@ -35,6 +37,16 @@ TABLES = {
 # The ID checks repeat the schema's namespaces so that the database itself
 # refuses a sentinel ID outside its namespace, whatever code writes to it.
 SCHEMA = f"""
+CREATE TABLE IF NOT EXISTS initial_assessments (
+    assessment_id TEXT PRIMARY KEY,
+    case_id TEXT NOT NULL,
+    caseworker TEXT NOT NULL,
+    decision TEXT NOT NULL,
+    justification TEXT NOT NULL,
+    opened_at TEXT NOT NULL,
+    recorded_at TEXT NOT NULL,
+    UNIQUE (case_id, caseworker)
+);
 CREATE TABLE IF NOT EXISTS decisions (
     decision_id TEXT PRIMARY KEY,
     case_id TEXT NOT NULL

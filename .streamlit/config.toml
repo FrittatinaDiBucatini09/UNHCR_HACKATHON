@@ -1,0 +1,36 @@
+[theme]
+base = "light"
+# UNHCR blue for actions and links, navy for text, Lato as the typeface.
+primaryColor = "#0072BC"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#EDF6FC"
+textColor = "#18375F"
+linkColor = "#0072BC"
+linkUnderline = false
+borderColor = "#CFE2F2"
+dataframeBorderColor = "#CFE2F2"
+dataframeHeaderBackgroundColor = "#EDF6FC"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "6px"
+font = "Lato:https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap"
+headingFontWeights = [900, 700, 700, 700, 700, 700]
+metricValueFontWeight = 700
+blueColor = "#0072BC"
+greenColor = "#00845A"
+redColor = "#C8102E"
+orangeColor = "#B35900"
+grayColor = "#5B6F82"
+chartCategoricalColors = ["#0072BC", "#18375F", "#00B398", "#EF4A60", "#8EBEFF", "#F2A900", "#6E4C9E"]
+
+[theme.sidebar]
+backgroundColor = "#F4F9FD"
+secondaryBackgroundColor = "#E3EFF9"
+borderColor = "#CFE2F2"
+
+[client]
+# Hides the developer menu and the deploy button in the header.
+toolbarMode = "minimal"
+
+[server]
+headless = true

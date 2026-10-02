@@ -1,23 +1,26 @@
-"""Monitor page: the three streams, the alert queue and the office manager's follow-up.
+"""Manager dashboard: the three streams, the alert queue and the office manager's follow-up.
 
 Aggregates come with their intervals, and a row that rests on fewer
 caseworkers than the configured minimum is hidden. The one view of individual
 caseworkers is the office manager's comparison of their own staff with the
-committee, as the team's monitoring requirements ask.
+committee, as the team's monitoring requirements ask. Simulated records and
+records entered in the app are never pooled.
 """
 
 import dataclasses
+from datetime import datetime
 
 import pandas as pd
 import streamlit as st
 
 from app import state
 from src.dataset import REPO_ROOT
-from src.sentinella import alerts, audit, export, metrics, sentinels, store
+from src.sentinella import alerts, audit, export, metrics, sentinels, simulate, store
 from src.sentinella.schema import (
     TARGETED,
     Alert,
     Decision,
+    InitialAssessment,
     Review,
     ReviewRequest,
     Sentinel,
@@ -26,6 +29,19 @@ from src.sentinella.schema import (
 
 SOURCES = {"Simulated year": "simulation", "Entered in the app": "app"}
 PROGRAMME = "Programme manager"
+# Offices take the theme's palette in order; the floor is grey so that it never
+# shares a colour with an office.
+OFFICE_COLORS = [
+    "#0072BC",
+    "#18375F",
+    "#00B398",
+    "#EF4A60",
+    "#8EBEFF",
+    "#F2A900",
+    "#6E4C9E",
+]
+FLOOR_COLOR = "#5B6F82"
+FLOOR = "floor (demo value)"
 
 
 def percent(values: pd.Series) -> pd.Series:
@@ -53,7 +69,7 @@ def readable(table: pd.DataFrame, labels: list[str]) -> pd.DataFrame:
 
 def breakdown(table: pd.DataFrame, choices: dict[str, list[str]], key: str) -> None:
     """A breakdown chosen by the viewer, shown with its intervals."""
-    name = st.selectbox("Breakdown", list(choices), key=key)
+    name = st.selectbox("Breakdown", list(choices), key=key, width=300)
     labels = choices[name] + [c for c in ("measure", "action") if c in table]
     st.dataframe(readable(table[table["breakdown"] == name], labels), hide_index=True)
 
@@ -83,6 +99,16 @@ def rule_view(outcomes: pd.DataFrame) -> pd.DataFrame:
     return pd.concat(checks, ignore_index=True) if checks else pd.DataFrame()
 
 
+def human_first(initials: list[InitialAssessment], decisions: list[Decision]) -> list:
+    """Each initial assessment with the final decision on the same case, if any."""
+    finals = {(d.case_id, d.caseworker): d for d in decisions}
+    return [
+        (initial, finals[(initial.case_id, initial.caseworker)])
+        for initial in initials
+        if (initial.case_id, initial.caseworker) in finals
+    ]
+
+
 @st.cache_data(show_spinner="Computing the aggregates")
 def tables(
     source: str, counts: tuple, _decisions, _reviews, _requests, _pool_table
@@ -100,30 +126,53 @@ def tables(
 
 demo, staff = state.demo(), state.staff()
 offices = sorted(staff["office"].unique())
-st.title("Monitor")
-source = SOURCES[st.sidebar.radio("Records", list(SOURCES))]
-role = st.sidebar.selectbox(
-    "Viewing as",
-    [PROGRAMME, *[alerts.owner(office, demo.alerts) for office in offices]],
+st.title("Manager dashboard", icon=":material/monitoring:")
+st.caption(
+    "Sentinels, the random audit and targeted reviews, kept apart. Every "
+    "parameter is a demo value, not a recommendation."
 )
+with st.container(horizontal=True, vertical_alignment="bottom"):
+    label = st.segmented_control(
+        "Records", list(SOURCES), default="Simulated year", required=True
+    )
+    role = st.selectbox(
+        "Viewing as",
+        [PROGRAMME, *[alerts.owner(office, demo.alerts) for office in offices]],
+        width=300,
+    )
+source = SOURCES[label]
+
 if source == "simulation":
     if not store.SIMULATION_DATABASE.exists():
         st.info(
-            "No simulated year yet. From the repository root, run: "
-            "python -m src.sentinella.simulate history"
+            "No simulated year yet. Generate it here, or from the repository root "
+            "run: python -m src.sentinella.simulate history",
+            icon=":material/info:",
         )
+        if st.button(
+            "Generate the simulated year", type="primary", icon=":material/play_arrow:"
+        ):
+            with st.spinner("Simulating a year of seven offices"):
+                simulate.write_history(demo, store.SIMULATION_DATABASE)
+            st.rerun()
         st.stop()
     connection = store.connect(store.SIMULATION_DATABASE)
     st.warning(
         "Simulated year: simulated caseworkers and committee under demo values. "
-        "Nothing here describes a real operation."
+        "Nothing here describes a real operation.",
+        icon=":material/science:",
     )
 else:
     connection = state.app_records()
+    st.caption(
+        "Decisions entered in this prototype on synthetic cases; never pooled "
+        "with the simulated year."
+    )
 
 decisions = store.load(connection, Decision)
 reviews = store.load(connection, Review)
 requests = store.load(connection, ReviewRequest)
+initials = store.load(connection, InitialAssessment)
 pool_table = sentinels.describe_pool(store.load(connection, Sentinel), demo)
 outcomes = metrics.sentinel_outcomes(decisions, pool_table)
 if source == "app" and not outcomes.empty:
@@ -139,6 +188,7 @@ if source == "app" and not outcomes.empty:
             demo.alerts,
         ),
     )
+stored = store.load(connection, Alert)
 computed = tables(
     source,
     (len(decisions), len(reviews), len(requests)),
@@ -147,11 +197,28 @@ computed = tables(
     requests,
     pool_table,
 )
+
+with st.container(horizontal=True):
+    st.metric("Decisions", f"{len(decisions):,}", border=True)
+    st.metric(
+        "On sentinels",
+        f"{sum(is_sentinel(d.case_id) for d in decisions):,}",
+        border=True,
+    )
+    st.metric("Committee reviews", f"{len(reviews):,}", border=True)
+    st.metric(
+        "Waiting for review",
+        f"{len({r.decision_id for r in audit.pending(requests, reviews)}):,}",
+        border=True,
+    )
+    st.metric(
+        "Open alerts", sum(alert.closed_at is None for alert in stored), border=True
+    )
 st.caption(
-    "Every parameter is a demo value, not a recommendation; see the Demo values tab. "
-    f"Rows resting on fewer than {demo.monitor.minimum_caseworkers} caseworkers are "
-    "hidden."
+    f"Rows resting on fewer than {demo.monitor.minimum_caseworkers} caseworkers "
+    "are hidden."
 )
+
 (
     alerts_tab,
     sentinels_tab,
@@ -163,20 +230,19 @@ st.caption(
     exports_tab,
 ) = st.tabs(
     [
-        "Alerts",
-        "Sentinels",
-        "Random audit",
-        "Targeted reviews",
-        "Office follow-up",
-        "Decision time",
-        "Demo values",
-        "Exports",
+        ":material/notifications: Alerts",
+        ":material/verified: Sentinels",
+        ":material/shuffle: Random audit",
+        ":material/flag: Targeted reviews",
+        ":material/supervisor_account: Office follow-up",
+        ":material/timer: Decision time",
+        ":material/tune: Demo values",
+        ":material/download: Exports",
     ]
 )
 
 with alerts_tab:
     st.caption(f"{alerts.describe(demo.alerts)}. Demo values.")
-    stored = store.load(connection, Alert)
     for alert in [a for a in stored if a.closed_at is None]:
         with st.container(border=True):
             st.markdown(f"**{alert.office}**, opened {alert.opened_at}")
@@ -193,10 +259,9 @@ with alerts_tab:
                 key=f"close-{alert.alert_id}",
                 disabled=not explanation.strip(),
             ):
-                closed_at = state.now()
                 store.update(
                     connection,
-                    alerts.close(alert, role, explanation.strip(), closed_at),
+                    alerts.close(alert, role, explanation.strip(), state.now()),
                 )
                 st.rerun()
     closed = [vars(a) for a in stored if a.closed_at is not None]
@@ -205,16 +270,30 @@ with alerts_tab:
         st.dataframe(pd.DataFrame(closed), hide_index=True)
     if not stored:
         st.info("No alert has been raised.")
+    st.caption(
+        "No automatic disciplinary action follows an alert; the owner explains "
+        "it and decides the follow-up."
+    )
     view = rule_view(outcomes)
     if not view.empty:
-        st.subheader("Correct override by office, over the rule's window")
-        st.line_chart(
-            view.pivot(index="month", columns="office", values="rate").assign(
-                **{"floor (demo value)": demo.alerts.floor}
-            ),
-            x_label="Last month of the window",
-            y_label="Correct override",
-        )
+        with st.container(border=True):
+            st.subheader("Correct override by office, over the rule's window")
+            chart = view.pivot(index="month", columns="office", values="rate")
+            offices_shown = list(chart.columns)
+            chart[FLOOR] = demo.alerts.floor
+            st.line_chart(
+                chart,
+                y=[*offices_shown, FLOOR],
+                color=[
+                    *(
+                        OFFICE_COLORS[i % len(OFFICE_COLORS)]
+                        for i in range(len(offices_shown))
+                    ),
+                    FLOOR_COLOR,
+                ],
+                x_label="Last month of the window",
+                y_label="Correct override",
+            )
 
 with sentinels_tab:
     st.caption(
@@ -245,72 +324,105 @@ with targeted_tab:
 
 with office_tab:
     if role == PROGRAMME:
-        st.info("Choose an office manager under Viewing as.")
+        st.info("Choose an office manager under Viewing as.", icon=":material/badge:")
     else:
         office = role.removeprefix(f"{demo.alerts.owner}, ")
         mine = set(staff.loc[staff["office"] == office, "caseworker"])
         by_id = {d.decision_id: d for d in decisions}
-        st.subheader("Targeted reviews where the committee decided otherwise")
-        rows = [
-            (
-                r.decision_id,
-                by_id[r.decision_id].caseworker,
-                by_id[r.decision_id].month,
-                by_id[r.decision_id].decision,
-                r.committee_decision,
-                r.reason,
-            )
-            for r in reviews
-            if r.stream == TARGETED
-            and by_id[r.decision_id].office == office
-            and r.committee_decision != by_id[r.decision_id].decision
-        ]
-        st.dataframe(
-            pd.DataFrame(
-                rows,
-                columns=[
-                    "decision",
-                    "caseworker",
-                    "month",
-                    "caseworker's decision",
-                    "committee",
-                    "selected because",
-                ],
-            ),
-            hide_index=True,
-        )
-        st.subheader("Caseworkers compared with the committee")
-        st.caption(
-            "Random-audit decisions of each caseworker in the office, accepted "
-            "and overridden apart. A disagreement is not an established error and "
-            "no sanction follows from these numbers. Comparing several caseworkers "
-            "at 95% means about one interval in twenty excludes the office's rate "
-            "by chance alone."
-        )
-        people = metrics.committee_disagreement(decisions, reviews, ["caseworker"])
-        if not people.empty:
-            people = people[people["caseworker"].isin(mine)]
-            st.dataframe(readable(people, ["caseworker", "action"]), hide_index=True)
-        if source == "app":
-            st.subheader("Refer a decision for blind review")
-            referable = [
-                d
-                for d in reversed(decisions)
-                if d.office == office and not is_sentinel(d.case_id)
+        with st.container(border=True):
+            st.subheader("Targeted reviews where the committee decided otherwise")
+            rows = [
+                (
+                    r.decision_id,
+                    by_id[r.decision_id].caseworker,
+                    by_id[r.decision_id].month,
+                    by_id[r.decision_id].decision,
+                    r.committee_decision,
+                    r.reason,
+                )
+                for r in reviews
+                if r.stream == TARGETED
+                and by_id[r.decision_id].office == office
+                and r.committee_decision != by_id[r.decision_id].decision
             ]
-            chosen = st.selectbox(
-                "Decision",
-                referable,
-                index=None,
-                format_func=lambda d: (
-                    f"{d.decision_id}: {d.caseworker}, {d.decided_at}, decided "
-                    f"{d.decision}, Cashy recommended {d.shown_recommendation}"
+            st.dataframe(
+                pd.DataFrame(
+                    rows,
+                    columns=[
+                        "decision",
+                        "caseworker",
+                        "month",
+                        "caseworker's decision",
+                        "committee",
+                        "selected because",
+                    ],
                 ),
+                hide_index=True,
             )
-            reason = st.text_area("Reason for the referral")
-            if st.button("Refer", disabled=chosen is None or not reason.strip()):
-                store.add(connection, audit.refer(chosen, reason.strip()))
-                st.success("Referred to the committee.")
+        with st.container(border=True):
+            st.subheader("Caseworkers compared with the committee")
+            st.caption(
+                "Random-audit decisions of each caseworker in the office, accepted "
+                "and overridden apart. A disagreement is not an established error "
+                "and no sanction follows from these numbers. Comparing several "
+                "caseworkers at 95% means about one interval in twenty excludes "
+                "the office's rate by chance alone."
+            )
+            people = metrics.committee_disagreement(decisions, reviews, ["caseworker"])
+            if not people.empty:
+                people = people[people["caseworker"].isin(mine)]
+                st.dataframe(
+                    readable(people, ["caseworker", "action"]), hide_index=True
+                )
+        pairs = [
+            (initial, final)
+            for initial, final in human_first(initials, decisions)
+            if final.office == office
+        ]
+        if pairs:
+            with st.container(border=True):
+                st.subheader("Human first: before and after the AI assessment")
+                st.dataframe(
+                    pd.DataFrame(
+                        [
+                            {
+                                "caseworker": final.caseworker,
+                                "initial decision": initial.decision,
+                                "final decision": final.decision,
+                                "changed": initial.decision != final.decision,
+                                "initial justification": initial.justification,
+                                "final justification": final.justification,
+                            }
+                            for initial, final in pairs
+                        ]
+                    ),
+                    hide_index=True,
+                )
+                st.caption(
+                    "A change after seeing the AI assessment is not, on its own, "
+                    "evidence of improvement or of bias."
+                )
+        if source == "app":
+            with st.container(border=True):
+                st.subheader("Refer a decision for blind review")
+                referable = [
+                    d
+                    for d in reversed(decisions)
+                    if d.office == office and not is_sentinel(d.case_id)
+                ]
+                chosen = st.selectbox(
+                    "Decision",
+                    referable,
+                    index=None,
+                    format_func=lambda d: (
+                        f"{d.decision_id}: {d.caseworker}, {d.decided_at}, decided "
+                        f"{d.decision}, Cashy recommended {d.shown_recommendation}"
+                    ),
+                )
+                reason = st.text_area("Reason for the referral")
+                if st.button("Refer", disabled=chosen is None or not reason.strip()):
+                    store.add(connection, audit.refer(chosen, reason.strip()))
+                    st.success("Referred to the committee.")
 
 with time_tab:
     st.caption(
@@ -327,6 +439,41 @@ with time_tab:
         shown["median, minutes"] = (times["median_seconds"] / 60).round(1)
         shown["90th percentile, minutes"] = (times["p90_seconds"] / 60).round(1)
         st.dataframe(shown, hide_index=True)
+    pairs = human_first(initials, decisions)
+    if pairs:
+        with st.container(border=True):
+            st.subheader("Human first: time before and after the initial assessment")
+            st.dataframe(
+                pd.DataFrame(
+                    [
+                        {
+                            "office": final.office,
+                            "minutes before the initial assessment": round(
+                                (
+                                    datetime.fromisoformat(initial.recorded_at)
+                                    - datetime.fromisoformat(initial.opened_at)
+                                ).total_seconds()
+                                / 60,
+                                1,
+                            ),
+                            "minutes from it to the final decision": round(
+                                (
+                                    datetime.fromisoformat(final.decided_at)
+                                    - datetime.fromisoformat(initial.recorded_at)
+                                ).total_seconds()
+                                / 60,
+                                1,
+                            ),
+                        }
+                        for initial, final in pairs
+                    ]
+                ),
+                hide_index=True,
+            )
+            st.caption(
+                "The second period includes the time before opening the AI "
+                "assessment; it is not time spent reading it."
+            )
 
 with values_tab:
     st.caption("Demo values chosen to run the prototype on S8, not recommendations.")
@@ -338,6 +485,14 @@ with exports_tab:
         "Tidy CSV tables for Power BI or any BI tool, with schema.csv describing "
         f"every column, written to {folder.relative_to(REPO_ROOT)}."
     )
-    if st.button("Write CSV exports"):
+    if st.button("Write CSV exports", icon=":material/save:"):
         paths = export.write_all(connection, demo, source, folder)
         st.success(", ".join(path.name for path in paths))
+    if initials:
+        st.download_button(
+            "Download human-first assessments",
+            pd.DataFrame([vars(a) for a in initials]).to_csv(index=False),
+            file_name="human-first-assessments.csv",
+            mime="text/csv",
+            icon=":material/download:",
+        )

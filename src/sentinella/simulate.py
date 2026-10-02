@@ -440,22 +440,29 @@ def save(result: Run, setup: Setup, path: Path) -> None:
     connection.close()
 
 
+def write_history(config: Config, path: Path) -> Run:
+    """Simulate the configured drift year on S8 and write it to a new database file."""
+    prepared = setup(to_english(load_sample()), config)
+    result = run(prepared, config, "drift", config.simulation.seed)
+    save(result, prepared, path)
+    return result
+
+
 def main() -> None:
     """Write a simulated year for the app, or report detection over many runs."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("command", choices=["history", "detection"])
     command = parser.parse_args().command
     demo = load()
-    prepared = setup(to_english(load_sample()), demo)
     if command == "history":
-        result = run(prepared, demo, "drift", demo.simulation.seed)
-        save(result, prepared, store.SIMULATION_DATABASE)
+        result = write_history(demo, store.SIMULATION_DATABASE)
         print(
             f"{len(result.decisions)} simulated decisions, {len(result.reviews)} "
             f"reviews and {len(result.alerts)} alerts written to "
             f"{store.SIMULATION_DATABASE.relative_to(REPO_ROOT)}"
         )
         return
+    prepared = setup(to_english(load_sample()), demo)
     drift, control = (
         detection(prepared, demo, scenario) for scenario in SCENARIOS[::-1]
     )

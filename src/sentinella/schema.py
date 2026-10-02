@@ -109,6 +109,24 @@ class Decision:
 
 
 @dataclass(frozen=True)
+class InitialAssessment:
+    """A human decision frozen before AI reveal, for the human-first demo case."""
+
+    assessment_id: str
+    case_id: str
+    caseworker: str
+    decision: str
+    justification: str
+    opened_at: str
+    recorded_at: str
+
+    def __post_init__(self) -> None:
+        check_value("decision", self.decision, RECOMMENDATIONS)
+        if not self.justification.strip():
+            raise ValueError("An initial assessment requires a justification.")
+
+
+@dataclass(frozen=True)
 class Review:
     """A blind committee review of one decision, tagged by its stream."""
 

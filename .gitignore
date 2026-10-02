@@ -64,8 +64,7 @@ sample_data/
 *~
 
 # ---------- AI agents ----------
-# Keep CLAUDE.md, AGENTS.md and .claude/settings.json in git;
-# ignore personal, machine-specific settings.
+# Ignore personal, machine-specific settings.
 .claude/settings.local.json
 CLAUDE.local.md
 
@@ -107,6 +106,20 @@ tmp/
 *.sqlite
 *.sqlite3
 *.db
+
+# ---------- Event materials and media ----------
+# Recordings, transcripts and challenge documents stay local.
+raw/
+transcripts/
+*.mp3
+*.ogg
+*.wav
+*.mp4
+*.zip
+*.pdf
+*.docx
+*.xlsx
+*.xls
 
 # ---------- Local tooling (not part of the project) ----------
 AGENT_RULES.md

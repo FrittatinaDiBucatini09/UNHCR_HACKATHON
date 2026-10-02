@@ -1,98 +1,65 @@
-"""About page: what the prototype measures, on what data, and its limits."""
+"""Current presentation workflow and its measurement limits."""
 
 import streamlit as st
 
-from app import state
-from src.sentinella.config import CATEGORIES
+from app import brand, state
 
 demo = state.demo()
-included = " and ".join(c for c in CATEGORIES if c in demo.demo_rule.include)
-rule = demo.targeted_review
-selected = "Cashy recommended " + " or ".join(sorted(rule.recommendations))
-if rule.fragility != "none":
-    selected += f" on a case one factor level away from another {rule.fragility}"
-JUDGMENT_FIRST = {
-    "fragile": "after the caseworker's own category on fragile cases",
-    "all": "after the caseworker's own category",
-    "none": "without asking for the caseworker's own category",
-}
-
-st.title("About Sentinella")
+st.title("About Sentinella", icon=":material/info:")
 st.markdown(
     f"""
-Cashy, an AI prototype, recommends whether a household should receive cash
-assistance, and a caseworker decides. Sentinella keeps a record of how
-caseworkers use Cashy's advice, so that a fall in correct override can be seen
-by a named owner before it reaches many households.
+This is an unofficial hackathon prototype for the Cashy Oversight Challenge,
+not an operational UNHCR service. All case records come from the released
+synthetic S8 sample, not actual households. The UNHCR logo marks the
+challenge the prototype answers; it does not mean UNHCR endorses the
+prototype.
 
-### What the data supports, and what it does not
+### Officer workspace
 
-All households are from S8, the synthetic sample released for the challenge.
-No record describes a real household, and no result here describes the real
-operation, its caseworkers or its offices.
+One demonstration officer has **15 cases**, chosen from a dropdown by case
+number; a check mark shows the cases whose final decision is recorded. The
+usual flow is a structured household summary, source-record
+access, optional opening of AI score/category and explanation, then a human
+Include/Exclude decision with a mandatory justification.
 
-The sample supports the **score and the category**. The recovered Scorecard
-formula reproduces the recorded final scores, and its category bands reproduce
-1,890 of the 1,900 recorded categories (reports/01_data_exploration.md).
+**Case 02** is an engineered sentinel. Its identity is disclosed only after
+submission. **Case 03** demonstrates a human-first alternative: an initial
+Include/Exclude decision and justification must be saved before unlocking AI.
+The final assessment is separate and may confirm or change the initial one.
+This example is not a validated experiment or a selected operational policy.
 
-It does not support **eligibility**. Real eligibility depends on funding and on
-administrative checks that the sample does not describe. Cashy's
-recommendation here follows a demo rule, not the operation's: {included} are
-recommended for inclusion, the other categories for exclusion. No model of
-eligibility is built or evaluated.
+The summary uses deterministic templates, not another generative AI. The factor
+checks are local sensitivity examples under the demo score/category formula;
+they are not a validated eligibility checklist or global feature importance.
+The available record contains household attributes and factor scores, not
+the full operational questionnaire or all administrative evidence.
 
-The reference standard is that demo rule applied to the formula category of a
-record. It is the standard the prototype holds decisions to, not the truth
-about a household's need.
+### Manager and independent review
 
-### Three measurement streams, kept apart
+The dashboard shows either the **simulated year**, in which simulated
+caseworkers and a simulated committee follow the demo values, or the
+**decisions entered in the app**. The two are never pooled, and neither
+describes a real operation. Alerts close only with a written explanation from
+their named owner. Time includes pauses and is not a measurement of attention.
 
-**Random audit.** A random {demo.random_audit.fraction:.0%} of decisions on
-real cases, accepted and overridden alike, goes to a committee of
-{demo.committee.size} that sees only the household's record. It estimates
-disagreement with the committee on real cases. It does not establish errors:
-the committee can be wrong too.
+The commission sees source case evidence without AI advice. Random audit and
+targeted/manual review remain separate. Commission disagreement does not itself
+establish an operator error, and no automatic disciplinary action is adopted.
 
-**Targeted reviews.** Decisions that look risky go to the same blind review:
-those where {selected}, and any decision a manager refers with a written
-reason. They catch
-problems in individual cases. Because they are chosen for risk, they never
-enter a rate.
+### Important metric limitation
 
-**Sentinels.** About one decision in {1 / demo.sentinels.injection_rate:.0f} is
-on a sentinel: a synthetic case whose reference decision is known in advance,
-with Cashy's answer concordant with it or deliberately discordant in a way
-that can be seen on screen. Sentinels give correct override, over-reliance,
-correct acceptance and under-reliance, relative to the reference standard,
-continuously. They measure how caseworkers treat Cashy's answer on cases like
-these; if their results and the random audit's diverge, the sentinels are not
-realistic enough.
+The AI panel includes score, category, explanation and an Include/Exclude
+recommendation. Acceptance
+and override compare the final human decision with that displayed recommendation.
+Correctness requires a separate reference, and the prototype's eligibility rule
+is only a **demo rule**, not the actual operation's eligibility criteria.
+Operational eligibility cannot be recovered from score and vulnerability category alone.
 
-Staff are told that their queues contain sentinels. A sentinel never reaches
-the committee or the distribution list. After deciding one, the caseworker who
-decided it sees its reference decision and what was discordant; nobody else
-sees individual sentinel results.
-
-### Decision-time aids and the two workflow variants
-
-The **fragility hint** names the factors whose one-level change would change
-the case's category, and which of them would also change the recommendation,
-so that the caseworker checks those against the record. **Judgment first**
-asks caseworkers for their own category before Cashy's answer.
-
-- **Variant A, summary first.** A summary of the record, with the complete
-  record one click away. Cashy's reasoning and answer appear on request,
-  {JUDGMENT_FIRST[demo.variants.judgment_first]}.
-- **Variant B, Cashy first.** The complete record with Cashy's reasoning and
-  answer from the start.
-
-Both show the fragility hint. Each office's caseworkers are split at random
-between the variants, so the caseworker is the unit the variants compare.
-
-### Demo values
-
-Every parameter, from the sentinel rate to the alert rule, is a demo value
-chosen to run the prototype on S8, not a recommendation for a real operation.
-The Monitor lists them all.
+The existing {demo.random_audit.fraction:.0%} audit setting and
+{demo.committee.size}-member commission are demonstration parameters, not
+recommended operational numbers. The presentation's one
+sentinel in fifteen cases is curated, not the configured operational injection
+rate. A full literature review and evaluation protocol are still pending.
 """
 )
+st.caption(brand.NOTICE)
