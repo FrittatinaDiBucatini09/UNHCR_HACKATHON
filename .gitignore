@@ -123,4 +123,4 @@ CLAUDE.local.md
 .aider*
 .github/copilot-instructions.md
 prompts/
-scratch/
+scratch/.agents/
