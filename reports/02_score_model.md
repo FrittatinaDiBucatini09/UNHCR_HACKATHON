@@ -1,4 +1,11 @@
+<p align="right"><img src="../docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="56"></p>
+
 # Phase 2: score model
+
+> [!NOTE]
+> Phase report of the Sentinella hackathon project, on the synthetic S8 sample. The "Answer"
+> panel named here became the AI assessment of the prototype's officer workspace, which shows
+> the score, category, recommendation and reasoning but not the per-factor breakdown.
 
 This report chooses and tests the model behind the "Answer" panel of the Sentinella prototype:
 the model that reproduces the Scorecard final score and vulnerability category from the eight

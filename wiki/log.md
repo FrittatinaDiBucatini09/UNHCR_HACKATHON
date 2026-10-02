@@ -272,3 +272,27 @@ Chronological record, oldest entry first. Entry format: `## [YYYY-MM-DD] operati
   random audit, with intervals and no flags; aggregates and exports hide cells
   resting on fewer than 3 caseworkers; the monitoring exports hold aggregates
   only.
+
+## [2026-10-02] implementation | Delivery: officer and manager workspaces, documentation
+
+- The delivered prototype follows the Vettore branch's design. The officer
+  workspace has one demonstration officer and 15 curated cases, picked from a
+  dropdown by case number, with a check mark on each completed case. Case 02 is
+  a discordant sentinel; case 03 is human first, with an initial decision and
+  justification saved before the AI assessment is shown. The app no longer shows
+  the phase 4 workflow variants A and B; the simulated year never modelled them.
+- The manager dashboard restores the phase 4 Monitor (three streams, alert queue
+  with a named owner, office follow-up with referral, decision time, demo values
+  and exports) in the Vettore styling, and adds the human-first comparison. The
+  sidebar links Officer and Manager directly; the start page, committee review
+  and About sit under More. The Vettore dashboard's illustrative mock source was
+  removed.
+- The UNHCR logo (the Wikimedia Commons insignia, unmodified) appears in the app
+  and the documents, always beside a statement that the prototype is unofficial
+  and not endorsed by UNHCR.
+- The notebooks, reports, wiki, challenge brief and analysis modules, which the
+  Vettore branch had dropped for a code-only release, are kept. The
+  organizational framework from the Balzani branch is included and updated to
+  the delivered app. The alert rule's detection study, re-run on the final code,
+  gives the same result: 181 of 200 drift years caught, 5 of 200 control years
+  with a false alarm.

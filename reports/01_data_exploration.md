@@ -1,4 +1,11 @@
+<p align="right"><img src="../docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="56"></p>
+
 # Phase 1: exploration of the S8 synthetic sample
+
+> [!NOTE]
+> Phase report of the Sentinella hackathon project, on the synthetic S8 sample. The "Answer"
+> panel named here became the AI assessment of the prototype's officer workspace, which shows
+> the score, category, recommendation and reasoning.
 
 This report checks the S8 synthetic sample against its data dictionary, works out how the
 Scorecard turns the eight factor scores into the final score, and describes the inputs, the

@@ -1,6 +1,9 @@
+<p align="right"><img src="../docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="56"></p>
+
 # Model card: Scorecard score model
 
-The score model behind the "Answer" panel of the Sentinella prototype. It reproduces the
+The score model behind the AI assessment of the Sentinella prototype, called the "Answer" panel
+in the phase reports. It reproduces the
 Scorecard final score and vulnerability category of a household from its eight factor scores
 and breaks the score down by factor. Numbers link to the tables in [`tables/`](tables/), produced
 by [`notebooks/02_score_model.ipynb`](../notebooks/02_score_model.ipynb) unless stated otherwise.
@@ -30,8 +33,9 @@ scores, and G_D = 2.4883 and G_N = 2.3955 their values when every factor is at i
 
 ## Intended use
 
-- Showing, in the Answer panel of the prototype, the score, category and factor breakdown of the
-  household under review, as an output separate from the reasoning panel.
+- Supplying the score and category of the AI assessment in the prototype's officer workspace,
+  shown apart from the reasoning text. The delivered workspace does not show the factor
+  breakdown.
 - Building review-screen material, override audits and training sessions on synthetic data.
 - Explaining how the Scorecard turns factor scores into a score.
 

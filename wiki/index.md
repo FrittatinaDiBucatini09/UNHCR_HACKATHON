@@ -1,8 +1,12 @@
+<p align="right"><img src="../docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="56"></p>
+
 # UNHCR Hackathon knowledge index
 
 Persistent knowledge layer for the **Data & Innovation for Refugee Inclusion Hackathon**, University of Trento and UNHCR Innovation, Trento 2026.
 
 ## Start here
+
+- [Project README](../README.md) - The delivered Sentinella prototype, its results and how to run it; [organizational framework](../organizational_framework.md) for roles and flows.
 
 - [[overview|Overview]] - Scope, key dates, operating frame, and the document's central narrative.
 - [[topics/programme|Detailed programme]] - Complete chronological agenda from Day 0 through Day 2.

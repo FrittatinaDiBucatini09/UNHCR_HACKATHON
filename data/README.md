@@ -1,20 +1,26 @@
+<p align="right"><img src="../docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="56"></p>
+
 # Data
 
-This folder holds the S8 synthetic sample released for the Cashy Oversight
-Challenge. Data files are kept out of git by `.gitignore`; only this README is
-tracked.
+This folder holds the S8 synthetic sample released for the Cashy Oversight Challenge and the
+local files the prototype writes. Everything in it except this README is kept out of git by
+`.gitignore`.
 
-## Getting the file
+> [!WARNING]
+> Do not commit the sample, the databases, the exports or copies of any of them.
+
+## ⬇️ Getting the sample
 
 Download "S8 synthetic sample (CSV, 1,900 rows)" from the Data section of the
-challenge page and save it in this folder without renaming or editing it:
+[challenge page](https://maldonam.github.io/public/) and save it in this folder without
+renaming or editing it:
 
 ```
 data/S8.synthetic_cashy_sample.csv
 ```
 
-The code reads it from that path, resolved from the repository root. To check
-that you have the same file the analyses were run on:
+The code reads it from that path, resolved from the repository root. To check that you have
+the same file the analyses were run on:
 
 | Property | Expected value |
 | :--- | :--- |
@@ -31,17 +37,28 @@ shasum -a 256 data/S8.synthetic_cashy_sample.csv
 Get-FileHash data\S8.synthetic_cashy_sample.csv -Algorithm SHA256
 ```
 
-## What it contains
+## 🗄️ Files the prototype writes
 
-One row is one household assessed at a targeting interview. The sample is
-synthetic and contains no real household. It keeps the Scorecard's structure,
-value sets and score arithmetic, but not the distribution of the real
-operation, so every result computed from it is a property of the sample only.
+| File | Written by | Content |
+| :--- | :--- | :--- |
+| `sentinella.sqlite` | The app, on first use | Decisions entered in the app, human-first initial assessments, review requests, committee reviews, alerts and the sentinel pool |
+| `simulation.sqlite` | The dashboard's Generate button, or `python -m src.sentinella.simulate history` | A simulated year of seven offices |
+| `exports/<source>/` | The dashboard's Exports tab, or `python -m src.sentinella.export <source>` | CSV tables, with `schema.csv` describing every column |
 
-The full data dictionary (Annex I), with an English name for each column and
-translations of the Spanish values, is in
-[docs/challenge_website.md](../docs/challenge_website.md). The columns fall
-into six groups:
+The two databases are never pooled. Delete a file to start it again. If `sentinella.sqlite`
+holds a sentinel pool drawn under another configuration, the app stops and asks for the file
+to be deleted.
+
+## 📋 What the sample contains
+
+One row is one household assessed at a targeting interview. The sample is synthetic and
+contains no real household. It keeps the Scorecard's structure, value sets and score
+arithmetic, but not the distribution of the real operation, so every result computed from it
+is a property of the sample only.
+
+The full data dictionary (Annex I), with an English name for each column and translations of
+the Spanish values, is in [docs/challenge_website.md](../docs/challenge_website.md); the code
+uses it through `src/data_dictionary.py`. The columns fall into six groups:
 
 | Group | Columns | Notes |
 | :--- | :--- | :--- |
@@ -52,20 +69,16 @@ into six groups:
 | Administrative flags | `ScoreCOMAR_PIL`, `ScoreIntenciones`, `ScoreDuplicidad` | 0 or ±500; can override the score |
 | Interview record | `month`, `OficinaACNUR` | Month (YYYY-MM) and anonymized field office code |
 
-## Blank values
+Blanks mean "not applicable", not missing data, and are kept as an explicit category instead
+of being imputed:
 
-Blanks mean "not applicable", not missing data, and are kept as an explicit
-category instead of being imputed:
-
-- `FemaleHeadedHousehold` and `CuidadorSolo` are blank for exactly the 925
-  single-person households (`NumIntegrantes` = 1), because the questions are
-  not asked of them.
-- `ScoreCOMAR_PIL` is blank for 960 rows where the asylum procedure check did
-  not apply.
+- `FemaleHeadedHousehold` and `CuidadorSolo` are blank for exactly the 925 single-person
+  households (`NumIntegrantes` = 1), because the questions are not asked of them.
+- `ScoreCOMAR_PIL` is blank for 960 rows where the asylum procedure check did not apply.
 - `OficinaACNUR` is blank for 21 rows.
 
-## Use
+## ⚠️ Use
 
-Work only with this synthetic sample and the other released materials. Do not
-try to re-identify, link or reconstruct households, caseworkers or offices, and
-do not commit the data or copies of it.
+Work only with this synthetic sample and the other released materials. Do not try to
+re-identify, link or reconstruct households, caseworkers or offices. The sample and its labels
+do not establish real-world distributions or operational eligibility.

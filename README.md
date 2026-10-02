@@ -1,230 +1,245 @@
-# Sentinella
+<p align="center">
+  <img src="docs/images/unhcr_logo.png" alt="UNHCR, the UN Refugee Agency" width="320">
+</p>
 
-Sentinella is our entry to the Cashy Oversight Challenge, a 48-hour hackathon
-run by the University of Trento and UNHCR Innovation. UNHCR targets cash
-assistance to displaced households with an expert-designed Scorecard; Cashy, an
-AI prototype, predicts the Scorecard result and recommends include or exclude,
-and a caseworker makes the decision. Sentinella measures whether caseworkers
-keep overriding Cashy when its recommendation is wrong, so that the operation
-can see when they stop.
+<h1 align="center">Sentinella</h1>
 
-The data science part of the project explores the synthetic sample and then
-builds a model that reproduces the Scorecard final score, with a per-case
-explanation of which factors drive it. That model powers the prototype's
-"Answer" panel.
+<p align="center">
+  <strong>Human oversight of AI-assisted cash targeting, one case at a time.</strong><br>
+  Our entry to the Cashy Oversight Challenge at the Data &amp; Innovation for Refugee Inclusion
+  Hackathon, University of Trento and UNHCR Innovation, Trento, October 2026.
+</p>
 
-The challenge brief, including the data dictionary, the judging criteria and
-the reference results of the earlier caseworker experiment, is in
-[docs/challenge_website.md](docs/challenge_website.md).
+<p align="center">
+  <img alt="Python 3.12" src="https://img.shields.io/badge/Python-3.12-0072BC?logo=python&logoColor=white">
+  <img alt="Streamlit 1.64" src="https://img.shields.io/badge/Streamlit-1.64-0072BC?logo=streamlit&logoColor=white">
+  <img alt="Data: synthetic S8 sample" src="https://img.shields.io/badge/data-synthetic%20S8%20sample-18375F">
+  <img alt="Status: hackathon prototype" src="https://img.shields.io/badge/status-hackathon%20prototype-5B6F82">
+</p>
 
-## Data
+> [!IMPORTANT]
+> Unofficial hackathon prototype on synthetic data, not a UNHCR service. The UNHCR logo
+> identifies the challenge this project answers; it does not mean that UNHCR endorses it.
 
-All work uses the S8 synthetic sample released for the challenge: 1,900
-synthetic households, 26 columns, no real household. The file is not tracked
-in git. [data/README.md](data/README.md) explains where to put it and how to
-check it is the right file.
+## 🎯 The problem
 
-## Setup
+UNHCR targets cash assistance to displaced households with an expert-designed Scorecard.
+Cashy, an AI prototype, predicts the Scorecard result and recommends include or exclude; a
+caseworker makes the decision. That oversight works only while caseworkers keep correcting
+Cashy when it is wrong. In an earlier experiment with 31 caseworkers, those who saw
+Responsible-AI statements on the decision screen overrode Cashy's wrong recommendations on
+66.7% of assessments, against 96.2% for those who did not
+([challenge brief, Annex II](docs/challenge_website.md)).
 
-Python 3.12, CPU only. From the repository root:
+Sentinella measures that oversight continuously, so that an operation can see when
+caseworkers stop catching errors, and in which office.
 
+## 🧭 How it measures oversight
+
+Three measurement streams are kept apart, in the records and in every estimate. The rates and
+thresholds below are demo values from [config/demo.toml](config/demo.toml).
+
+| Stream | How decisions are chosen | What it tells the manager |
+| :--- | :--- | :--- |
+| Sentinels | 1 decision in 10 is on a household kept out of the real queue, whose reference decision is known in advance. Half show a deliberately wrong Cashy answer: a misread input, a category that does not match the score, or reasoning that does not match the answer | Correct override, over-reliance, correct acceptance and under-reliance, every month |
+| Random audit | A random 10% of real decisions, accepted and overridden alike, goes to a committee of three that sees the household record only | How often decisions disagree with the committee. A disagreement is not an established error |
+| Targeted reviews | Exclusions one factor level away from inclusion, and any decision a manager refers with a written reason | Individual cases to correct. They are chosen for risk, so they never enter a rate |
+
+An alert opens for an office when its correct override on discordant sentinels over the last
+four months has the upper end of its 95% interval below 87.5%, with at least five such
+decisions. Only the office manager can close it, and only with a written explanation. No
+automatic sanction follows.
+
+```mermaid
+flowchart LR
+    S[("Sentinel pool<br/>reference known")] -->|"1 decision in 10"| O["Officer decides<br/>and justifies"]
+    R["Real cases"] --> O
+    O -->|"decisions on sentinels"| A{{"Alert rule<br/>4 months, 87.5% floor"}}
+    O -->|"random 10%"| C["Blind committee<br/>of three"]
+    O -->|"near-miss exclusions,<br/>referrals"| C
+    A -->|"opens an alert"| M["Office manager<br/>explains and closes"]
+    C --> D["Manager dashboard"]
+    A --> D
 ```
-# macOS
+
+Every role, what it sees and what it cannot do are set out in
+[organizational_framework.md](organizational_framework.md).
+
+## 🖥️ The prototype
+
+A Streamlit app with two workspaces, linked from the sidebar. The start page, the committee
+review and the About page sit under **More**.
+
+### Officer workspace
+
+One demonstration officer works through 15 cases, picked from a dropdown by case number. A
+check mark shows the cases whose final decision is recorded.
+
+<p align="center">
+  <img src="docs/images/officer_cases.png" alt="Officer workspace: the case dropdown, where a completed case carries a check mark, and the progress bar" width="100%">
+</p>
+
+For each case the officer reads a household summary and the available record, checks the
+factors whose one-level change would change the category, and opens the AI assessment when
+ready: score, vulnerability category, recommendation and reasoning. The officer rates the
+explanation and the answer separately, then records Include or Exclude with a justification
+written so that it could be shared with the household.
+
+<p align="center">
+  <img src="docs/images/officer_ai_assessment.png" alt="AI assessment panel: score, category, recommendation, reasoning and two ratings" width="80%">
+</p>
+
+- **Case 02** is a sentinel with a deliberately wrong AI answer. The officer learns its
+  reference decision after submitting.
+- **Case 03** is human first: the officer saves an initial decision and justification before
+  the AI assessment becomes available, then records the final decision separately.
+
+### Manager dashboard
+
+<p align="center">
+  <img src="docs/images/manager_dashboard.png" alt="Manager dashboard: summary cards, an open alert for one office and correct override by office over time" width="100%">
+</p>
+
+The dashboard shows either a simulated year of seven offices or the decisions entered in the
+app, never pooled. Its tabs hold the alert queue and the rule's chart, sentinel and
+random-audit rates with 95% intervals, targeted-review counts, recorded decision time, the
+demo values and CSV exports for Power BI or any BI tool. Viewing as an office manager adds
+that office's follow-up: targeted reviews the committee decided otherwise, each caseworker
+compared with the committee, human-first cases before and after the AI assessment and, for
+decisions entered in the app, referral for blind review. Figures resting on fewer than three
+caseworkers are hidden.
+
+The committee review shows each selected decision's household record alone, without Cashy's
+answer, the officer's decision or the reason the case was selected. Three members vote and
+the majority decides.
+
+## 🚀 Quick start
+
+Python 3.12. From the repository root:
+
+```sh
+# macOS and Linux
 python3.12 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m streamlit run app/streamlit_app.py
+```
 
+```powershell
 # Windows (PowerShell)
 py -3.12 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m streamlit run app/streamlit_app.py
 ```
 
-On macOS, LightGBM also needs the OpenMP runtime: `brew install libomp`.
+The app opens at http://localhost:8501. It needs the S8 synthetic sample, saved unchanged as
+`data/S8.synthetic_cashy_sample.csv`; [data/README.md](data/README.md) says where to get it
+and how to check it. The simulated year is generated from the dashboard with one click.
 
-## Running
+The same steps from the command line, plus the detection study and the exports (on Windows,
+replace `.venv/bin/python` with `.venv\Scripts\python.exe`):
 
-Notebooks are executed headless so that their outputs are saved in the file.
-Every notebook resolves paths from the repository root, fixes its random seeds
-and must run top to bottom on a fresh kernel.
+```sh
+# A simulated year of seven offices, in a few seconds
+.venv/bin/python -m src.sentinella.simulate history
 
+# The alert rule over 200 simulated years per scenario, about 5 minutes
+.venv/bin/python -m src.sentinella.simulate detection
+
+# CSV tables with schema.csv, written to data/exports/<source>/
+.venv/bin/python -m src.sentinella.export simulation
+.venv/bin/python -m src.sentinella.export app
 ```
+
+## 📊 Results on synthetic data
+
+> [!NOTE]
+> These numbers describe the synthetic sample and a simulation under demo values, not a real
+> operation.
+
+- **Alert rule.** In the simulation, correct override in one office falls from 96.2% to 66.7%
+  in month 7, the two arms of the brief's experiment. The rule caught the fall in 181 of 200
+  simulated years (90.5%, 95% CI 85.6% to 93.8%), a median of 2 months after the change and
+  within 3 months in 80.5% of them. In the control scenario, 5 of 200 simulated years raised a
+  false alarm (2.5%, 95% CI 1.1% to 5.7%). Source: `python -m src.sentinella.simulate detection`.
+- **Scorecard formula.** The formula recovered from the sample reproduces the final score of
+  every held-out household to within 0.00002 points with no fitted parameters, and the
+  recorded category of 1,890 of the 1,900 households
+  ([report 01](reports/01_data_exploration.md), [report 02](reports/02_score_model.md)). The
+  prototype's AI assessment uses this formula.
+
+## 🔬 Data science
+
+| Notebook | Report | What it does |
+| :--- | :--- | :--- |
+| [01_data_exploration.ipynb](notebooks/01_data_exploration.ipynb) | [01_data_exploration.md](reports/01_data_exploration.md) | Checks S8 against its data dictionary and recovers the Scorecard formula |
+| [02_score_model.ipynb](notebooks/02_score_model.ipynb) | [02_score_model.md](reports/02_score_model.md) | Tests the formula against learned models on held-out data and builds per-factor explanations |
+
+The [model card](reports/model_card.md) states what the score model can and cannot be used
+for. The notebooks run top to bottom on a fresh kernel and need extra packages:
+
+```sh
+.venv/bin/python -m pip install -r requirements-analysis.txt
 .venv/bin/jupyter nbconvert --to notebook --execute --inplace notebooks/01_data_exploration.ipynb
 .venv/bin/jupyter nbconvert --to notebook --execute --inplace notebooks/02_score_model.ipynb
 ```
 
-The first notebook writes the exploration report's tables and figures, the
-second those of the score model; the reports are
-[reports/01_data_exploration.md](reports/01_data_exploration.md) and
-[reports/02_score_model.md](reports/02_score_model.md).
+On macOS, LightGBM also needs the OpenMP runtime: `brew install libomp`.
 
-Tests and style checks:
+## 🗂️ Repository layout
 
 ```
+app/                         Streamlit pages; UNHCR logo files in assets/
+config/                      demo.toml: every parameter of the prototype, with its reason
+data/                        S8 sample and local databases (not tracked), with a README
+docs/                        Challenge brief; images/ holds the logos and screenshots
+notebooks/                   Analyses, numbered in the order they run
+reports/                     Phase reports and model card, with figures/ and tables/
+src/                         Scorecard formula, data dictionary and analysis code
+src/sentinella/              Sentinels, audit, alerts, metrics, simulation and exports
+tests/                       Unit and app tests
+wiki/                        Team knowledge base: challenge, sources and design decisions
+organizational_framework.md  Who decides, who checks and who answers for an alert
+```
+
+## 🧪 Tests and checks
+
+```sh
+.venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python -m pytest
 .venv/bin/ruff check .
 .venv/bin/ruff format --check .
 ```
 
-On Windows, replace `.venv/bin/` with `.venv\Scripts\`.
+Tests that need the S8 file skip when it is absent; provide it to run the whole suite. The app
+tests run the pages headless on temporary databases and never touch `data/*.sqlite`.
 
-## Running the prototype
+## ⚖️ Limits
 
-The prototype needs the S8 file in `data/`. Run from the repository root; on
-Windows, replace `.venv/bin/python` with `.venv\Scripts\python`.
+- Every household is synthetic and every parameter a demo value. Nothing here describes the
+  real operation.
+- "Correct" means agreement with a reference decision or with the committee, the institution's
+  standard, not the truth about a household's need. A sentinel's reference is the demo rule
+  applied to the formula category of its record.
+- Sentinels measure how caseworkers treat cases built to test them; the random audit checks
+  whether real cases get the same treatment.
+- Include and Exclude follow a demo rule (High and Severe included), not operational
+  eligibility, which also depends on funding and administrative checks. Eligibility is never
+  benchmarked, and no result is compared with the 67.6% accuracy reported for Cashy on real
+  data.
+- Recorded time includes interruptions and is not a measure of attention. Ratings are not proof
+  of correct reliance.
+- Role navigation is not authentication. The available record is not the complete operational
+  questionnaire, and the factors to verify are local sensitivity aids, not a validated
+  checklist.
+- No attempt is made to re-identify, link or reconstruct households, caseworkers or offices.
+- The project does not show that these workflows improve reliance or sustain attention; that
+  needs an independent evaluation.
 
-```
-# A simulated year of seven offices for the Monitor page, in a few seconds
-.venv/bin/python -m src.sentinella.simulate history
+---
 
-# The app, served at http://localhost:8501
-.venv/bin/python -m streamlit run app/streamlit_app.py
-```
-
-The app has four pages:
-
-- **Caseworker:** one case at a time, under the caseworker's workflow variant.
-- **Committee review:** blind votes on the decisions selected for review.
-- **Monitor:** the three streams, the alert queue, decision time and the
-  exports. It covers either the simulated year or the decisions entered in the
-  app.
-- **About:** what the data supports and what it does not.
-
-Decisions entered in the app are kept in `data/sentinella.sqlite` and the
-simulated year in `data/simulation.sqlite`. Both files are local and ignored by
-git, and the two are never pooled. Delete a file to start it again.
-
-Two more commands:
-
-```
-# Detection delay and false alarms of the alert rule, over 200 simulated
-# years per scenario, in about four minutes
-.venv/bin/python -m src.sentinella.simulate detection
-
-# Tidy CSV tables for Power BI or another BI tool, written to
-# data/exports/<source>/ with schema.csv describing every column
-.venv/bin/python -m src.sentinella.export simulation
-.venv/bin/python -m src.sentinella.export app
-```
-
-Every parameter, from the sentinel rate to the alert rule, is in
-`config/demo.toml`. Each carries a comment, because they are demo values chosen
-to run the prototype on S8, not recommendations for a real operation.
-
-## What each stream measures
-
-The prototype keeps three measurement streams apart, in the records and in
-every estimate.
-
-**Random audit.** A random 10% of decisions on real cases, accepted and
-overridden alike, goes to a committee of three. The committee sees the
-household's record, not Cashy's answer or the caseworker's decision. The audit
-estimates how often caseworkers' decisions disagree with the committee on real
-cases, separately for accepted and overridden decisions. It does not establish
-errors, since the committee can be wrong. Under the demo values a caseworker
-has about 50 audited decisions a year, so comparisons of individuals have wide
-intervals.
-
-**Targeted reviews.** Some decisions go to the same blind review because they
-look risky: those where Cashy recommended exclusion on a case one factor level
-away from inclusion, and any decision a manager refers with a written reason.
-They find individual cases to correct. Because they are chosen for risk, they
-never enter a rate.
-
-**Sentinels.** One decision in ten is on a sentinel: a household from S8 kept
-out of the real queue. Its reference decision is the demo rule applied to the
-formula category of its record. Cashy's displayed answer is either concordant
-with that reference or discordant in one of three ways a caseworker can see on
-screen:
-
-- a misread input;
-- a category that does not match the score;
-- reasoning that does not match the answer.
-
-Sentinels give correct override, over-reliance, correct acceptance and
-under-reliance, relative to the reference standard, every month. They measure
-how caseworkers treat cases built to test them. They do not show that real
-cases get the same treatment; comparing them with the random audit checks
-that. Staff know that sentinels exist. Only the caseworker who decided a
-sentinel sees its reference decision afterwards, and a sentinel never reaches
-the committee or the distribution list.
-
-Each office's correct override on discordant sentinels is checked over four
-months. An alert opens when the upper end of its 95% interval falls below
-87.5%, provided the window holds at least five decisions. Only the office
-manager can close the alert, and only with a written explanation.
-
-In the simulation, under the demo values, correct override in one office fell
-from 96.2% to 66.7%, the brief's two experiment arms. The alert caught the fall
-in 181 of 200 simulated years (90.5%, 95% CI 85.6 to 93.8), a median of two
-months after the change. In the control scenario, 5 of 200 simulated years
-raised a false alarm (2.5%, 95% CI 1.1 to 5.7). `simulate detection` prints
-these numbers. They describe the simulation, not a real operation.
-
-The caseworker screen adds two aids:
-
-- **Fragility hint:** names the factors whose one-level change would change the
-  category, so that the caseworker checks them against the record.
-- **Judgment first:** asks for the caseworker's own category before Cashy's
-  answer.
-
-Each office's caseworkers are split at random between two workflow variants.
-Variant A shows a summary of the record first, asks for the caseworker's own
-category on fragile cases, and then shows Cashy's reasoning and answer.
-Variant B shows the complete record with Cashy's reasoning and answer from the
-start. Both show the hint, and in both the caseworker rates the reasoning and
-the answer separately. The Monitor shows recorded decision time for decisions
-entered in the app. Recorded time is not attention.
-
-## Score model
-
-The Answer panel uses the Scorecard formula recovered in phase 1. It needs no
-training and no data file. Given the eight factor scores of a household,
-`predict` returns the final score, the vulnerability category and how many
-points each factor contributes:
-
-```python
-from src.score_model import predict
-
-result = predict(
-    {
-        "Demographics.HH.Head": 2.70,
-        "Demographics.Language": 1.0,
-        "Demographics.Profiles": 1.0,
-        "Demographics.Documentation": 1.0,
-        "Needs_and_Coping.BasicNeeds": 1.78,
-        "Needs_and_Coping.Housing": 2.12,
-        "Needs_and_Coping.Neg.mechanism": 1.79,
-        "Needs_and_Coping.Dependency": 1.0,
-    }
-)
-# result["score"] 30.96, result["category"] "Moderate", result["attributions"]
-```
-
-What the model can and cannot be used for is in the
-[model card](reports/model_card.md).
-
-## Repository layout
-
-```
-app/        Sentinella prototype: Streamlit pages
-config/     Demo configuration of the prototype
-data/       Synthetic sample (not tracked) and its README
-docs/       Challenge brief
-notebooks/  Analyses, numbered in the order they run
-reports/    Written reports and model card, with figures/ (PNG) and tables/ (CSV)
-src/        Python code imported by the notebooks, tests and app
-tests/      Unit tests
-```
-
-## Ground rules
-
-These come from the challenge brief and apply to every analysis here.
-
-- Results describe the synthetic sample, not the real operation.
-- No attempt is made to re-identify, link or reconstruct households,
-  caseworkers or offices.
-- Eligibility is not benchmarked on this sample, and no result is compared
-  with the 67.6% accuracy reported for Cashy on real data.
-- "Correct" means agreement with the operation's recorded determination. That
-  is the institution's standard, not the truth about a household's need.
-- Breakdowns by office, month or category report the group size, and groups
-  with fewer than 30 households are flagged as unreliable.
+<p align="center">
+  <img src="docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="44"><br>
+  <sub>Unofficial hackathon prototype for the UNHCR Cashy Oversight Challenge, on synthetic data.
+  The logo files are the UNHCR insignia from Wikimedia Commons, unmodified, used to identify the
+  challenge; they do not imply endorsement.</sub>
+</p>
