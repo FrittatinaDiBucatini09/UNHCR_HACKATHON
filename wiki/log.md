@@ -160,3 +160,115 @@ Chronological record, oldest entry first. Entry format: `## [YYYY-MM-DD] operati
 - Archive target: `unhcr-wiki-2026-10-01.zip` in the workspace. Package only the `wiki/` directory, preserving its index, log, topic pages, source summaries and relative structure; no original documents or datasets from `raw/`.
 - References to raw evidence are preserved as provenance, but their target documents are intentionally absent from this wiki-only export.
 - No project decision, source content or analysis changed; the index remains current. This entry records the export request, scope and pre-packaging checks.
+
+## [2026-10-01] decision | Sentinella implementation, Gate 0
+
+- The user started implementation (roadmap step 6) with the Sentinella
+  implementation prompt, before the literature matrix (step 2) and a selected
+  operator protocol (step 3). The change of order is deliberate.
+- Confirmed: a random audit over accepted and overridden decisions; targeted
+  reviews are identified separately and excluded from rate estimates. This
+  answers the current single grill-me question.
+- Confirmed: sentinels, that is cases with a reference decision known in
+  advance, injected blind into the queue with Cashy's answer concordant or
+  deliberately discordant, as a third stream alongside the random audit and
+  targeted reviews.
+- Confirmed: the fragility hint, derived from the Scorecard formula (a
+  one-level change in one factor that changes the category), as the method for
+  selecting what a caseworker verifies. The earlier candidate-register idea
+  remains an unapproved proposal. Score proximity alone may not describe
+  eligibility outside the prototype's demo rule.
+- Kept: the manager sees each operator's performance against the commission.
+  The implementation prompt's aggregates-only rule is dropped; the brief's
+  requirement that caseworkers not be identifiable remains to be reconciled.
+- Open: both operator-flow variants remain unselected. Their definitions,
+  including how the fragility hint and judgment-first apply, are due before the
+  caseworker screen is built.
+
+## [2026-10-01] implementation | Sentinella phase 1, core library
+
+- Built the demo configuration, the log records (separate ID namespaces for
+  real cases and sentinels, enforced in code and in the database), SQLite
+  storage, and single-factor fragility on the recovered Scorecard formula.
+- Demo values, not recommendations: Cashy's recommendation is Include for High
+  and Severe and Exclude otherwise; a case is fragile when one factor moved by
+  one level changes its category.
+- On the S8 synthetic sample under these values, 1,200 of 1,900 households
+  (63.2%) are fragile by category and 622 (32.7%) by demo recommendation. Every
+  Moderate household is fragile, and a fragile household has a median of four
+  factors that can change its category. Negative coping, basic needs and
+  housing drive fragility most often.
+
+## [2026-10-01] decision | Sentinella phase 2, measurement streams
+
+- Committee review is blind to both Cashy's answer and the first decision.
+  Targeted reviews come from a configurable rule (demo: Cashy recommends
+  exclusion on a fragile case) or a manager's written referral; they never
+  enter a rate estimate. Sentinels never go to the committee.
+- Records shown to caseworkers and reviewers omit the three administrative
+  flags, which the demo rule ignores and which contradict the recorded
+  decisions in S8.
+- A sentinel's reference decision is the demo rule applied to the Scorecard
+  category of its record; EligibilityTarget is never used. A sentinel takes
+  the office and interview month of the queue it joins; sentinels and real
+  cases are disjoint parts of S8.
+- Three discordance types, each visible on screen: input misread, category
+  mismatch, reasoning-answer inconsistency. Only variants that change the
+  demo recommendation are used.
+- On S8 under the demo rule, non-fragile and far discordant sentinels exist
+  only in the exclusion direction and are mostly category mismatches.
+
+## [2026-10-01] decision | Sentinella phase 3, metrics, alerts and simulation
+
+- Reliance on sentinels is reported as four rates relative to the reference
+  standard, with Wilson 95% intervals and caseworker-level bootstrap
+  intervals. The random audit is reported as disagreement with the committee,
+  separately for accepted and overridden decisions. No single agreement rate.
+- Alert rule per office (demo values): correct override on discordant
+  sentinels over 3 months; an alert opens when the upper end of its 95%
+  interval is below 85% with at least 5 decisions, and closes only with a
+  written explanation from its named owner.
+- Simulated result under demo values, not a property of the operation: a fall
+  in correct override from 96.2% to 66.7% in one office was caught in 68.5% of
+  200 runs within six months, a median two months after the change; 8.0% of
+  200 control runs raised at least one false alarm.
+
+## [2026-10-02] decision + implementation | Sentinella gate 3 answers and phase 4
+
+- The user answered the open points of gate 3 and asked to go ahead: define
+  the two workflow variants by choosing the strongest option; show decision time on
+  the Monitor; install Streamlit (1.64.0, pinned); tell staff that sentinels
+  exist; choose the strongest demo values. The user also asked for the
+  proposed entries to be written into the wiki, which the implementation
+  prompt had reserved to the user.
+- Variants, defined for the prototype on the user's delegation, not selected
+  on evidence. A, summary first: a summary of every recorded field with the
+  complete record one click away; on fragile cases the caseworker records a
+  category before Cashy's reasoning and answer are shown. B, Cashy first: the
+  complete record with Cashy's reasoning and answer from the start. Both show
+  the fragility hint, which names every factor whose one-level change would
+  change the category, those that would also change the recommendation first.
+  Caseworkers are assigned at random, half of each office to each variant, so
+  the caseworker is the unit of comparison. The literature matrix (step 2) has
+  not yet informed these definitions.
+- Staff are told that their queues contain sentinels. Only the caseworker who
+  decided a sentinel sees its reference decision and what was discordant.
+- Demo values re-chosen by a stated rule: among settings whose simulated
+  control years raise a false alarm at most 5% of the time, the one that
+  catches the most drifts within three months. Sentinel rate 10% with a pool
+  of 400 (200 sentinels used three times each supply 600 decisions a year,
+  which a 10% rate exceeds by the sixth month); alert window 4 months; floor
+  87.5%. The targeted rule now takes exclusions on cases one factor level from
+  the other recommendation: 1,076 of 10,080 real decisions in a simulated year
+  instead of 3,350.
+- Simulated result under the new demo values, not a property of the
+  operation: the fall from 96.2% to 66.7% was caught in 181 of 200 simulated
+  years (90.5%, 95% CI 85.6 to 93.8), a median two months after the change;
+  5 of 200 control years raised a false alarm (2.5%, 95% CI 1.1 to 5.7).
+- Phase 4 built: Streamlit pages (Caseworker, Committee review, Monitor,
+  About), tidy CSV exports with a schema file, and run instructions in the
+  README. The identifiability requirement is handled as follows: the office
+  manager alone sees their own caseworkers compared with the committee on the
+  random audit, with intervals and no flags; aggregates and exports hide cells
+  resting on fewer than 3 caseworkers; the monitoring exports hold aggregates
+  only.

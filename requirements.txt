@@ -13,6 +13,9 @@ shap==0.52.0
 ipykernel==7.4.0
 nbconvert==7.17.1
 
+# Sentinella prototype app
+streamlit==1.64.0
+
 # Tests and code style
 pytest==9.1.1
 ruff==0.16.9

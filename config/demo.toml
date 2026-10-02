@@ -1,0 +1,145 @@
+# Every value is a demo value chosen to run the prototype on the S8 synthetic
+# sample. None is a recommendation for a real operation.
+
+[demo_rule]
+# Demo value, not a recommendation. Stands in for Cashy's include/exclude answer,
+# since real eligibility depends on funding and administrative checks. Including
+# High and Severe makes both answers common in the sample.
+include = ["High", "Severe"]
+
+[fragility]
+# Demo value, not a recommendation. A case is fragile when moving one factor by
+# one level changes this outcome: "category" or "recommendation".
+changes = "category"
+
+[sentinels]
+# Demo value, not a recommendation: sentinels drawn from S8. Their households are
+# kept out of the real queue. The pool must outlast the year: pool_size times
+# max_uses has to exceed the sentinel decisions the injection rate asks for.
+pool_size = 400
+# Demo value, not a recommendation: share of the pool whose displayed answer is
+# discordant with the reference decision.
+discordant_share = 0.5
+# Demo value, not a recommendation: share of discordant sentinels in which Cashy
+# excludes a case that the reference decision includes.
+exclusion_share = 0.5
+# Demo value, not a recommendation: share of fragile sentinels, the same among
+# concordant and among discordant ones. Close to the 63% of S8 households that
+# are fragile, so that the fragility hint does not single out sentinels.
+fragile_share = 0.65
+# Demo value, not a recommendation: share of discordant sentinels far from every
+# category boundary, drawn on top of the fragility matching.
+far_share = 0.2
+# Demo value, not a recommendation: final-score points from the nearest category
+# boundary from which a case counts as far.
+far_distance = 8.0
+# Demo value, not a recommendation: share of a caseworker's decisions that are
+# on sentinels. One decision in ten is time spent on a household that is not
+# waiting for assistance.
+injection_rate = 0.1
+# Demo value, not a recommendation: decisions a sentinel receives before it
+# retires.
+max_uses = 3
+# Demo value, not a recommendation: random seed of the pool draw.
+seed = 1
+
+[random_audit]
+# Demo value, not a recommendation: share of decisions on real cases, accepted or
+# overridden, that the committee re-reviews.
+fraction = 0.1
+
+[targeted_review]
+# Demo value, not a recommendation: a decision goes to a blind second review when
+# Cashy's displayed recommendation is one of these and the case is fragile in the
+# sense below. A manager can also refer any decision by hand.
+recommendations = ["Exclude"]
+# Demo value, not a recommendation: the outcome a one-level move of one factor
+# must change for the rule to select the case: "recommendation", "category", or
+# "none" to select regardless. With "recommendation" the rule selects the
+# exclusions that one factor level would turn into inclusions.
+fragility = "recommendation"
+
+[committee]
+# Demo value, not a recommendation: members who review each selected decision.
+size = 3
+# Demo value, not a recommendation: how the members' votes become the
+# committee's decision. Only "majority" is implemented, with an odd size.
+rule = "majority"
+
+[alerts]
+# Demo value, not a recommendation: months of decisions on sentinels over which
+# each office's correct-override rate is computed.
+window_months = 4
+# Demo value, not a recommendation: an office raises an alert when the upper end
+# of the 95% interval of that rate falls below this share...
+floor = 0.875
+# Demo value, not a recommendation: ...and the window holds at least this many
+# decisions on discordant sentinels.
+minimum_discordant = 5
+# Demo value, not a recommendation: role of the named owner who must explain an
+# office's alert.
+owner = "Office manager"
+
+[variants]
+# Demo value, not a recommendation: cases on which variant A asks for the
+# caseworker's own category before showing Cashy's reasoning and answer:
+# "fragile", "all" or "none". Variant B shows them from the start, so it never
+# asks.
+judgment_first = "fragile"
+# Demo value, not a recommendation: random seed of the assignment of caseworkers
+# to variant A or B, half of each office to each.
+seed = 1
+
+[monitor]
+# Demo value, not a recommendation: an aggregate on the monitor or in the exports
+# that rests on fewer caseworkers than this is hidden.
+minimum_caseworkers = 3
+
+[metrics]
+# Demo value, not a recommendation: resamples of caseworkers for clustered
+# intervals.
+bootstrap_replicates = 1000
+# Demo value, not a recommendation: random seed of the resampling.
+seed = 1
+
+[simulation]
+# Demo value, not a recommendation: first simulated month.
+start_month = "2025-01"
+# Demo value, not a recommendation: simulated months.
+months = 12
+# Demo value, not a recommendation: pseudonymous caseworkers in each office, in
+# the simulation and in the app.
+caseworkers_per_office = 3
+# Demo value, not a recommendation: real cases each caseworker decides a month.
+cases_per_caseworker = 40
+# Demo value, not a recommendation: chance that Cashy displays a recommendation
+# discordant with the reference decision on a real case that admits one. Only
+# households near the boundary of the demo rule do, about half of the S8 queue.
+cashy_error_rate = 0.05
+# Demo value, not a recommendation: chance that a caseworker overrides a
+# discordant recommendation; 96.2% in the brief's experiment without
+# Responsible-AI statements.
+correct_override = 0.962
+# Demo value, not a recommendation: chance that a caseworker overrides a
+# concordant recommendation; the brief's experiment observed none in 62.
+under_reliance = 0.02
+# Demo value, not a recommendation: standard deviation, on the log-odds scale,
+# of caseworkers' individual chance of a correct override.
+caseworker_spread = 0.5
+# Demo value, not a recommendation: chance that a simulated committee member
+# votes against the reference decision.
+committee_noise = 0.05
+# Demo value, not a recommendation: office whose decision screen changes in the
+# drift scenario.
+drift_office = "sotap"
+# Demo value, not a recommendation: simulated month, counting from 1, from which
+# the changed screen is used.
+drift_month = 7
+# Demo value, not a recommendation: chance of a correct override on the changed
+# screen; 66.7% in the brief's experiment with Responsible-AI statements.
+drift_correct_override = 0.667
+# Demo value, not a recommendation: simulated runs per scenario for the
+# detection delay and false alarm rate.
+runs = 200
+# Demo value, not a recommendation: random seed of the first run.
+seed = 1

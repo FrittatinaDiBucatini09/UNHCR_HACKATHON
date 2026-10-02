@@ -143,3 +143,9 @@ def test_value_between_levels_is_rejected():
     row = {column: 1.0 for column in FACTORS} | {"Demographics.Language": 1.3}
     with pytest.raises(ValueError, match="Demographics.Language"):
         predict(row)
+
+
+def test_blank_factor_value_is_rejected():
+    row = {column: 1.0 for column in FACTORS} | {"Demographics.Language": float("nan")}
+    with pytest.raises(ValueError, match="Demographics.Language"):
+        predict(row)

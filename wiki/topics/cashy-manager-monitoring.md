@@ -4,7 +4,7 @@
 
 Source of requirements: user's **2026-10-01** background-document message and latest end-to-end workflow reconstruction. Institutional background: [[sources/un-system-ethical-ai-principles|UN AI principles]], [[sources/unhcr-targeting-and-prioritization-mapping|UNHCR mapping]] and [[sources/nist-ai-rmf-measurement|NIST measurement guidance]]. Explicit user requirements are marked below; remaining design details are **proposals**, not a tested system or requirements specified by those sources.
 
-- **Accepted requirement:** decision time is fundamental and must be visible to the manager/dashboard.
+- **Accepted requirement:** decision time is fundamental and must be visible to the manager/dashboard. The Sentinella prototype shows recorded time from opening a case to submitting the decision, for decisions entered in the app, labelled as not a measure of attention (2026-10-02).
 - **Accepted requirement:** trace each case/request and show operator performance compared with assessments by an independent commission that receives no AI advice. Commission reviewer count, frequency, case-selection policy and disagreement resolution are not fixed.
 - **Accepted requirement:** manager can follow up with an operator after a serious error and manually refer cases to peer review. What “richiamo” entails, error confirmation, responsibility and disciplinary procedure remain open; this is not an automatic punishment rule.
 - **Accepted requirement:** operators must write a case justification, made available to the household in case of problems. Its form, timing and disclosure safeguards remain open; see [[topics/cashy-pipeline-planning|operator protocol]].
@@ -15,11 +15,11 @@ Source of requirements: user's **2026-10-01** background-document message and la
 
 ## Independent commission: what the dashboard can claim
 
-User-confirmed architecture: periodically reviewed cases receive independent human assessments without AI advice. Commission size and who may participate remain open. Hiding the initial operator decision and justification until the reviewer records a judgment is an assistant recommendation to investigate, not a confirmed requirement. Independent commission assessment and ad hoc peer-review referral are distinct functions; neither automatically resolves disagreements.
+User-confirmed architecture: periodically reviewed cases receive independent human assessments without AI advice. Commission size and who may participate remain open. Hiding the initial operator decision and justification from the reviewer was adopted for the prototype on 2026-10-01: the committee sees the household record only. Independent commission assessment and ad hoc peer-review referral are distinct functions; neither automatically resolves disagreements.
 
 Until the reference/adjudication protocol is specified, a disagreement is a **disagreement**, not a confirmed operator error. Show reviewed case counts, unresolved disagreements and the reference status alongside comparison metrics. Only a suitably confirmed reference can support labels such as reviewed error or correct override, and shared errors can remain even after agreement. Commission-based assessment does not establish universal truth about actual household need.
 
-Sampling exclusively from overrides would omit potentially wrong acceptance of AI advice. Override itself is not an error: it can be correct or incorrect; acceptance can likewise be correct or incorrect. The current assistant recommendation is a random audit spanning both actions, with separate targeted review. It is **not yet accepted by the user**. See [[topics/cashy-pipeline-planning|current single interview question]].
+Sampling exclusively from overrides would omit potentially wrong acceptance of AI advice. Override itself is not an error: it can be correct or incorrect; acceptance can likewise be correct or incorrect. A random audit spanning both actions, with separate targeted review, was **confirmed on 2026-10-01**. See [[topics/cashy-pipeline-planning|planning]].
 
 ## Time: what should be measured
 
@@ -57,7 +57,7 @@ An actual probability claim would require defined reference judgments and valida
 
 ## Random audit plus targeted review
 
-Proposed sampling principle, awaiting user approval: retain a random audit alongside targeted review because confident/unflagged decisions may also be wrong. Include acceptance and override; preserve selection reason/probability and distinguish audit from targeted queues. A raw error rate from targeted suspicious cases is not the population rate. Quantities, reviewer count and selection policy remain open in [[topics/cashy-pipeline-planning|audit planning]].
+Sampling principle, confirmed on 2026-10-01: retain a random audit alongside targeted review because confident/unflagged decisions may also be wrong. Include acceptance and override; preserve selection reason/probability and distinguish audit from targeted queues. A raw error rate from targeted suspicious cases is not the population rate. Quantities, reviewer count and selection policy remain open in [[topics/cashy-pipeline-planning|audit planning]].
 
 Manager follow-up and manual peer-review referral capabilities are now **user-confirmed**. Proposed response details, not adopted: confirm facts, distinguish AI/data/policy/operator contributors, correct the household decision where authorized, and consider coaching or process repair. A single outlier or disagreement does not establish operator misconduct. Formal disciplinary decisions need a separately defined fair governance procedure; no automatic reprimand is specified.
 
@@ -82,3 +82,13 @@ The dashboard should not silently equate severity, error certainty and operator 
 5. How should alerts lead to household remedy and process improvement without encouraging gaming or suppressing doubt?
 
 These questions operationalize the next [[topics/cashy-pipeline-planning|research stage]], not a completed literature review or selected UX.
+
+## Sentinella prototype: what the manager sees
+
+Built on 2026-10-02 (see the [[log|log]]). Every number below is a demo value, not an operational choice.
+
+- **Alerts per office:** correct override on discordant sentinels over 4 months; an alert opens when the upper end of its 95% interval falls below 87.5% with at least 5 decisions. Only the named owner, the office manager, can close it, with a written explanation; a closed alert can reopen from the next month if the rule still fires.
+- **Operator view:** only the office manager sees their own caseworkers compared with the committee on the random audit, accepted and overridden apart, with intervals. There are no flags and no sanction follows. Across many caseworkers, about one interval in twenty excludes the office's rate by chance.
+- **Hidden cells:** aggregates and the monitoring exports hide cells that rest on fewer than 3 caseworkers. The exports are aggregate tables, plus the alert log and the distribution list.
+- **Sentinels:** staff are told that queues contain sentinels. Only the caseworker who decided one sees its reference decision; the manager sees sentinel results by office, category, direction and variant, not by person.
+- **Known limit:** an office alert from a window in which only one or two caseworkers decided sentinels describes those caseworkers.

@@ -44,7 +44,9 @@ def level_of(column: str, value: float) -> float:
     """The level of factor column closest to value, if within LEVEL_TOLERANCE."""
     levels = np.asarray(scorecard.FACTOR_LEVELS[column])
     nearest = levels[np.abs(levels - float(value)).argmin()]
-    if abs(nearest - float(value)) > LEVEL_TOLERANCE:
+    # Written as "not within" so that a blank (NaN) value, which fails every
+    # comparison, is rejected instead of being read as the lowest level.
+    if not abs(nearest - float(value)) <= LEVEL_TOLERANCE:
         allowed = ", ".join(f"{level:.2f}" for level in levels)
         raise ValueError(f"{column} = {value} is not one of its levels: {allowed}")
     return float(nearest)
