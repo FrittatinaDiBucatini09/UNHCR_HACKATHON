@@ -6,8 +6,9 @@
 
 <p align="center">
   <strong>Human oversight of AI-assisted cash targeting, one case at a time.</strong><br>
-  Our entry to the Cashy Oversight Challenge at the Data &amp; Innovation for Refugee Inclusion
-  Hackathon, University of Trento and UNHCR Innovation, Trento, October 2026.
+  Our entry to the Cashy Oversight Challenge at the
+  <a href="https://sites.google.com/unitn.it/datainnovationforrefugee/home-page">Data &amp; Innovation for Refugee Inclusion Hackathon</a>,
+  University of Trento and UNHCR Innovation, Trento, October 2026.
 </p>
 
 <p align="center">
@@ -18,8 +19,8 @@
 </p>
 
 > [!IMPORTANT]
-> Unofficial hackathon prototype on synthetic data, not a UNHCR service. The UNHCR logo
-> identifies the challenge this project answers; it does not mean that UNHCR endorses it.
+> Prototype built at a University of Trento hackathon supported by UNHCR, on synthetic
+> data. It is not an operational service.
 
 ## 🎯 The problem
 
@@ -239,7 +240,8 @@ tests run the pages headless on temporary databases and never touch `data/*.sqli
 
 <p align="center">
   <img src="docs/images/unhcr_emblem.png" alt="UNHCR emblem" width="44"><br>
-  <sub>Unofficial hackathon prototype for the UNHCR Cashy Oversight Challenge, on synthetic data.
-  The logo files are the UNHCR insignia from Wikimedia Commons, unmodified, used to identify the
-  challenge; they do not imply endorsement.</sub>
+  <sub>Prototype for the Cashy Oversight Challenge, built at the
+  <a href="https://sites.google.com/unitn.it/datainnovationforrefugee/home-page">Data &amp; Innovation for Refugee Inclusion Hackathon</a>
+  of the University of Trento, supported by UNHCR Innovation, on synthetic data.
+  Logo files from Wikimedia Commons, unmodified.</sub>
 </p>

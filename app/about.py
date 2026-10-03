@@ -8,11 +8,11 @@ demo = state.demo()
 st.title("About Sentinella", icon=":material/info:")
 st.markdown(
     f"""
-This is an unofficial hackathon prototype for the Cashy Oversight Challenge,
-not an operational UNHCR service. All case records come from the released
-synthetic S8 sample, not actual households. The UNHCR logo marks the
-challenge the prototype answers; it does not mean UNHCR endorses the
-prototype.
+This is a prototype for the Cashy Oversight Challenge, built at the
+[Data & Innovation for Refugee Inclusion Hackathon](https://sites.google.com/unitn.it/datainnovationforrefugee/home-page),
+run by the University of Trento with the support of UNHCR Innovation. It is
+not an operational service. All case records
+come from the released synthetic S8 sample, not actual households.
 
 ### Officer workspace
 
