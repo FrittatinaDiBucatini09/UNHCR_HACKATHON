@@ -51,17 +51,11 @@ four months has the upper end of its 95% interval below 87.5%, with at least fiv
 decisions. Only the office manager can close it, and only with a written explanation. No
 automatic sanction follows.
 
-```mermaid
-flowchart LR
-    S[("Sentinel pool<br/>reference known")] -->|"1 decision in 10"| O["Officer decides<br/>and justifies"]
-    R["Real cases"] --> O
-    O -->|"decisions on sentinels"| A{{"Alert rule<br/>4 months, 87.5% floor"}}
-    O -->|"random 10%"| C["Blind committee<br/>of three"]
-    O -->|"near-miss exclusions,<br/>referrals"| C
-    A -->|"opens an alert"| M["Office manager<br/>explains and closes"]
-    C --> D["Manager dashboard"]
-    A --> D
-```
+<p align="center">
+  <a href="docs/images/cashy_sentinella_flowchart.png">
+    <img src="docs/images/cashy_sentinella_flowchart.png" alt="How a case flows through Cashy and Sentinella: from the household record through the Scorecard formula and Cashy to the caseworker; sentinels, the alert rule and review selection run automatically; the office manager, the blind review committee and the programme manager act on the results; outputs are the distribution list, private feedback, the alert log and the dashboard exports" width="100%">
+  </a>
+</p>
 
 Every role, what it sees and what it cannot do are set out in
 [organizational_framework.md](organizational_framework.md).
